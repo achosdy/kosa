@@ -1,4 +1,4 @@
-const CACHE_NAME = 'klondike-pwa-redone-v2';
+const CACHE_NAME = 'klondike-pwa-reference-visuals-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,17 @@ const ASSETS = [
   './assets/icons/favicon-32.png',
   './assets/icons/apple-touch-icon.png',
   './assets/icons/icon-192.png',
-  './assets/icons/icon-512.png'
+  './assets/icons/icon-512.png',
+  './assets/themes/sponge-bg.jpg',
+  './assets/themes/minecraft-bg.jpg',
+  './assets/themes/halloween-bg.jpg',
+  './assets/themes/chernobyl-bg.jpg',
+  './assets/themes/kitty-bg.jpg',
+  './assets/themes/sponge-back.svg',
+  './assets/themes/minecraft-back.svg',
+  './assets/themes/halloween-back.svg',
+  './assets/themes/chernobyl-back.svg',
+  './assets/themes/kitty-back.svg',
 ];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
