@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Косынка • Solitaire PWA</title>
+  <meta name="description" content="Локальная HTML/PWA игра Косынка с темами, рекордами, подсказками и установкой на главный экран." />
+  <meta name="theme-color" content="#101624" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Косынка" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-ios-180.png" />
+  <link rel="icon" href="assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-default">
+  <div class="bg-layer" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <section class="brand">
+        <div class="app-icon mini-card" aria-hidden="true">A</div>
+        <div>
+          <h1>Косынка</h1>
+          <p id="themeTagline">Классический пасьянс без серверов и рекламы</p>
+        </div>
+      </section>
+      <section class="stats" aria-label="Статистика игры">
+        <div><span id="moves">0</span><small>ходы</small></div>
+        <div><span id="timer">00:00</span><small>время</small></div>
+        <div><span id="best">—</span><small>рекорд</small></div>
+      </section>
+    </header>
+
+    <nav class="toolbar" aria-label="Управление">
+      <button id="newGameBtn" class="primary">Новая игра</button>
+      <button id="restartBtn">Заново</button>
+      <button id="undoBtn">Отменить</button>
+      <button id="hintBtn">Подсказка</button>
+      <button id="rulesBtn">Как играть</button>
+      <button id="installBtn" class="install">Скачать приложение</button>
+      <button id="iosBtn">На iPhone</button>
+      <label class="theme-picker">Стиль
+        <select id="themeSelect" aria-label="Выбор темы">
+          <option value="default">Дефолтная</option>
+          <option value="light">Светлая</option>
+          <option value="dark">Темная</option>
+          <option value="minecraft">Minecraft style</option>
+          <option value="halloween">Halloween</option>
+          <option value="kitty">Hello Kitty style</option>
+          <option value="chernobyl">Чернобыль</option>
+          <option value="sponge">Губка-боб style</option>
+        </select>
+      </label>
+    </nav>
+
+    <section class="game-board" id="gameBoard" aria-label="Игровое поле Косынки">
+      <div class="top-row">
+        <div class="pile-wrap"><div class="pile-title">Колода</div><div id="stock" class="pile stock"></div></div>
+        <div class="pile-wrap"><div class="pile-title">Сброс</div><div id="waste" class="pile waste"></div></div>
+        <div class="spacer"></div>
+        <div class="foundation-zone" id="foundations"></div>
+      </div>
+      <div class="tableau" id="tableau"></div>
+    </section>
+
+    <aside class="side-panel">
+      <section class="hint-card">
+        <h2>Подсказка</h2>
+        <p id="hintText">Нажми «Подсказка», и игра покажет возможный ход.</p>
+      </section>
+      <section class="theme-note">
+        <h2 id="themeTitle">Дефолтная тема</h2>
+        <p id="themeDescription">Классические масти: черные карты кладутся на красные и наоборот, по убыванию.</p>
+      </section>
+    </aside>
+  </main>
+
+  <dialog id="modal">
+    <div class="modal-body">
+      <button class="close" id="closeModal" aria-label="Закрыть">×</button>
+      <h2 id="modalTitle"></h2>
+      <div id="modalContent"></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
