@@ -3,88 +3,684 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Косынка • Solitaire PWA</title>
-  <meta name="description" content="Локальная HTML/PWA игра Косынка с темами, рекордами, подсказками и установкой на главный экран." />
-  <meta name="theme-color" content="#101624" />
+  <meta name="theme-color" content="#111827" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Косынка" />
+  <title>Косынка — PWA пасьянс</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="assets/icons/icon-ios-180.png" />
-  <link rel="icon" href="assets/icons/icon-192.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <style>
+    :root{
+      --bg0:#0b1220; --bg1:#172033; --panel:rgba(255,255,255,.10); --panel2:rgba(255,255,255,.16);
+      --text:#f8fafc; --muted:#bac4d6; --stroke:rgba(255,255,255,.22);
+      --accent:#6ee7ff; --accent2:#9f7aea; --good:#34d399; --bad:#fb7185;
+      --card-face:#f8fafc; --card-ink:#111827; --card-red:#d4243a; --card-black:#111827;
+      --card-back-a:#242c3d; --card-back-b:#111827; --felt:#0d1728;
+      --card-w: clamp(48px, 7.25vw, 104px); --card-h: calc(var(--card-w) * 1.42);
+      --fan-y: clamp(19px, 2.15vw, 30px); --gap: clamp(7px, 1.1vw, 16px);
+      --radius: clamp(9px, 1.1vw, 16px);
+      --shadow: 0 20px 60px rgba(0,0,0,.38);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; overflow:hidden; background:var(--bg0); color:var(--text); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; user-select:none; -webkit-tap-highlight-color:transparent;}
+    body{position:relative; min-height:100svh; touch-action:manipulation;}
+    body::before,body::after{content:""; position:fixed; inset:-12%; pointer-events:none; z-index:-2; transition:opacity .35s ease, filter .35s ease;}
+    body::after{z-index:-1; opacity:.55; mix-blend-mode:screen;}
+    body[data-theme="default"]::before{background:radial-gradient(circle at 10% 15%, rgba(239,68,68,.25), transparent 32%), radial-gradient(circle at 92% 10%, rgba(59,130,246,.25), transparent 30%), linear-gradient(135deg, #0b1220, #121827 50%, #0e1728);}    
+    body[data-theme="default"]::after{background:repeating-linear-gradient(45deg, transparent 0 32px, rgba(255,255,255,.045) 33px 35px), radial-gradient(circle at 50% 120%, rgba(16,185,129,.2), transparent 45%);}
+    body[data-theme="light"]{--bg0:#eef3fb;--bg1:#f8fafc;--panel:rgba(255,255,255,.72);--panel2:rgba(255,255,255,.86);--text:#101827;--muted:#4b5563;--stroke:rgba(31,41,55,.17);--felt:#e7edf7;--card-face:#ffffff;--card-back-a:#dbeafe;--card-back-b:#a5b4fc;--shadow:0 20px 55px rgba(31,41,55,.15)}
+    body[data-theme="light"]::before{background:radial-gradient(circle at 14% 8%, rgba(59,130,246,.18), transparent 30%), radial-gradient(circle at 80% 30%, rgba(236,72,153,.15), transparent 34%), linear-gradient(135deg,#edf2fa,#ffffff 58%,#e7eefb)}
+    body[data-theme="light"]::after{background:repeating-linear-gradient(135deg, transparent 0 32px, rgba(15,23,42,.05) 33px 34px)}
+    body[data-theme="dark"]{--bg0:#020617;--bg1:#0f172a;--panel:rgba(15,23,42,.72);--panel2:rgba(30,41,59,.78);--text:#e5e7eb;--muted:#94a3b8;--stroke:rgba(148,163,184,.22);--felt:#070b16;--card-face:#161b27;--card-ink:#e5e7eb;--card-red:#fb7185;--card-black:#cbd5e1;--card-back-a:#111827;--card-back-b:#020617}
+    body[data-theme="dark"]::before{background:radial-gradient(circle at 18% 15%, rgba(99,102,241,.22), transparent 28%), radial-gradient(circle at 82% 18%, rgba(14,165,233,.16), transparent 30%), linear-gradient(140deg,#020617,#111827 45%,#030712)}
+    body[data-theme="dark"]::after{background:radial-gradient(circle at 50% 50%, transparent 0 40%, rgba(0,0,0,.42) 70%), repeating-linear-gradient(90deg, transparent 0 36px, rgba(255,255,255,.035) 37px 39px)}
+    body[data-theme="minecraft"]{--bg0:#1f3b1f;--bg1:#315c2d;--panel:rgba(37,62,38,.78);--panel2:rgba(66,95,55,.76);--text:#f5ffe8;--muted:#d4eec8;--stroke:rgba(220,255,190,.24);--accent:#8bea55;--accent2:#61c267;--felt:rgba(19,44,21,.9);--card-face:#f7f2df;--card-ink:#1f2937;--card-red:#d43038;--card-black:#1b1b1b;--card-back-a:#7a5a35;--card-back-b:#4d8f3d;}
+    body[data-theme="minecraft"]::before{background:linear-gradient(#6ebdff 0 30%, #74c160 30% 50%, #543a25 50% 100%)}
+    body[data-theme="minecraft"]::after{opacity:.9; mix-blend-mode:normal; background:linear-gradient(90deg, rgba(0,0,0,.16) 1px, transparent 1px),linear-gradient(rgba(0,0,0,.16) 1px, transparent 1px),radial-gradient(circle at 9% 19%, rgba(255,255,255,.35) 0 2%, transparent 2.3% 100%),radial-gradient(circle at 70% 16%, rgba(255,255,255,.3) 0 3%, transparent 3.4% 100%); background-size:42px 42px,42px 42px,100% 100%,100% 100%;}
+    body[data-theme="halloween"]{--bg0:#160321;--bg1:#301046;--panel:rgba(38,15,57,.74);--panel2:rgba(73,33,91,.76);--text:#fff4e6;--muted:#e7c9ff;--stroke:rgba(255,187,105,.27);--accent:#f97316;--accent2:#a855f7;--felt:rgba(25,9,39,.93);--card-face:#27162f;--card-ink:#fff4e6;--card-red:#ff5b58;--card-black:#d8c2ff;--card-back-a:#38144c;--card-back-b:#111827;}
+    body[data-theme="halloween"]::before{background:radial-gradient(circle at 82% 9%, #ffdf9a 0 4.5%, transparent 4.8%), radial-gradient(circle at 20% 112%, rgba(249,115,22,.45), transparent 25%), linear-gradient(180deg,#220538 0,#3b1058 42%,#100116 100%)}
+    body[data-theme="halloween"]::after{opacity:.9; mix-blend-mode:normal; background:linear-gradient(165deg, transparent 0 64%, rgba(0,0,0,.72) 64% 100%), radial-gradient(ellipse at 14% 78%, rgba(0,0,0,.65) 0 6%, transparent 6.3%), radial-gradient(ellipse at 22% 80%, rgba(249,115,22,.82) 0 3%, transparent 3.3%), repeating-linear-gradient(110deg, transparent 0 78px, rgba(0,0,0,.32) 79px 83px)}
+    body[data-theme="kitty"]{--bg0:#ffd7ea;--bg1:#ffeaf4;--panel:rgba(255,255,255,.70);--panel2:rgba(255,255,255,.85);--text:#68224c;--muted:#9f5279;--stroke:rgba(190,24,93,.18);--accent:#fb8ac0;--accent2:#f9a8d4;--felt:rgba(255,236,246,.87);--card-face:#fffafc;--card-ink:#68224c;--card-red:#e11d74;--card-black:#7c335f;--card-back-a:#ffc7df;--card-back-b:#fff5fb;--shadow:0 22px 55px rgba(190,24,93,.18)}
+    body[data-theme="kitty"]::before{background:radial-gradient(circle at 15% 17%, rgba(255,255,255,.8), transparent 12%), radial-gradient(circle at 86% 22%, rgba(255,255,255,.65), transparent 13%), linear-gradient(135deg,#ffd7ea,#fff3f8 45%,#ffd1e6)}
+    body[data-theme="kitty"]::after{opacity:.85; mix-blend-mode:normal; background:radial-gradient(circle at 20% 70%, rgba(244,114,182,.28) 0 5%, transparent 5.3%), radial-gradient(circle at 70% 72%, rgba(244,114,182,.22) 0 4%, transparent 4.3%), repeating-linear-gradient(45deg, transparent 0 54px, rgba(236,72,153,.09) 55px 57px)}
+    body[data-theme="chernobyl"]{--bg0:#11140d;--bg1:#26301b;--panel:rgba(24,31,21,.77);--panel2:rgba(47,58,39,.79);--text:#e8f6d5;--muted:#bfceaf;--stroke:rgba(202,255,112,.19);--accent:#b6ff39;--accent2:#facc15;--felt:rgba(7,14,9,.93);--card-face:#202a1f;--card-ink:#e8f6d5;--card-red:#ffcc33;--card-black:#badf80;--card-back-a:#2e3a2a;--card-back-b:#0d1309;}
+    body[data-theme="chernobyl"]::before{background:radial-gradient(circle at 78% 18%, rgba(205,255,74,.21), transparent 28%), linear-gradient(180deg,#2b321c 0,#151911 40%,#090c07 100%)}
+    body[data-theme="chernobyl"]::after{opacity:.82; mix-blend-mode:normal; background:linear-gradient(90deg, transparent 0 8%, rgba(0,0,0,.45) 8% 9%, transparent 9% 18%, rgba(0,0,0,.38) 18% 19%, transparent 19% 100%), radial-gradient(circle at 26% 76%, rgba(182,255,57,.16) 0 9%, transparent 9.5%), repeating-linear-gradient(25deg, transparent 0 46px, rgba(182,255,57,.045) 47px 49px)}
+    body[data-theme="sponge"]{--bg0:#02557e;--bg1:#0ea5b8;--panel:rgba(6,89,124,.78);--panel2:rgba(31,129,159,.76);--text:#f7ffcf;--muted:#cdf6ff;--stroke:rgba(236,254,255,.24);--accent:#facc15;--accent2:#22d3ee;--felt:rgba(2,69,101,.9);--card-face:#fffdf2;--card-ink:#07364d;--card-red:#ef4663;--card-black:#09566e;--card-back-a:#0f9fc4;--card-back-b:#facc15;}
+    body[data-theme="sponge"]::before{background:radial-gradient(circle at 18% 24%, rgba(250,204,21,.3), transparent 9%), radial-gradient(circle at 80% 18%, rgba(255,255,255,.36), transparent 7%), linear-gradient(180deg,#0ea5e9 0,#0891b2 52%,#075985)}
+    body[data-theme="sponge"]::after{opacity:.78; mix-blend-mode:screen; background:radial-gradient(circle at 12% 80%, rgba(34,211,238,.7) 0 2.5%, transparent 2.8%), radial-gradient(circle at 35% 70%, rgba(255,255,255,.55) 0 1.5%, transparent 1.8%), radial-gradient(circle at 68% 82%, rgba(255,255,255,.5) 0 2%, transparent 2.4%), repeating-linear-gradient(170deg, transparent 0 70px, rgba(255,255,255,.08) 72px 76px)}
+
+    .app{height:100svh; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); display:grid; grid-template-rows:auto auto 1fr; gap:clamp(8px,1.3vh,16px); max-width:1540px; margin:0 auto;}
+    .topbar,.toolbar,.panel,.modal-card{border:1px solid var(--stroke); background:linear-gradient(135deg,var(--panel2),var(--panel)); box-shadow:var(--shadow); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);}
+    .topbar{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:clamp(10px,1.6vw,18px); border-radius:22px; min-height:86px;}
+    .brand{display:flex; gap:14px; align-items:center; min-width:0}
+    .logo{width:68px;height:68px; border-radius:14px; flex:0 0 auto; display:grid; place-items:center; background:linear-gradient(135deg,#fff,#f1f5f9); color:#d4243a; font-weight:1000; font-size:38px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+    .brand h1{font-size:clamp(30px,4vw,46px); margin:0; line-height:1; letter-spacing:-.04em}
+    .brand p{margin:.45rem 0 0; color:var(--muted); font-size:clamp(13px,1.4vw,16px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .stats{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .stat{min-width:86px; padding:12px 16px; border:1px solid var(--stroke); border-radius:16px; text-align:center; background:rgba(0,0,0,.14)}
+    .stat b{display:block; font-size:20px; line-height:1; font-variant-numeric:tabular-nums}
+    .stat span{display:block; color:var(--muted); font-size:12px; margin-top:8px}
+    .toolbar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px; border-radius:20px; min-height:70px;}
+    .buttons{display:flex; align-items:center; flex-wrap:wrap; gap:9px}
+    button,select{font:inherit; color:var(--text); border:1px solid var(--stroke); border-radius:13px; background:rgba(255,255,255,.12); min-height:41px; padding:0 14px; cursor:pointer; transition:transform .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;}
+    button:hover,select:hover{transform:translateY(-1px); background:rgba(255,255,255,.18)}
+    button:active{transform:translateY(1px) scale(.99)}
+    button:disabled{opacity:.42; cursor:not-allowed; transform:none}
+    .primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#061018; font-weight:900; border:0; box-shadow:0 10px 28px rgba(0,0,0,.20)}
+    .warm{background:linear-gradient(135deg,#ffd166,#ff8f70); color:#1f1307; font-weight:900; border:0}
+    .theme-picker{display:flex; align-items:center; gap:10px; margin-left:auto; color:var(--muted)}
+    select{background:#111827; color:white; max-width:210px; outline:0}
+    body[data-theme="light"] select,body[data-theme="kitty"] select{background:#fff; color:#111827}
+    .main{display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:clamp(10px,1.4vw,18px); min-height:0;}
+    .board-wrap{position:relative; min-width:0; border-radius:26px; overflow:hidden; border:1px solid rgba(255,255,255,.11); background:radial-gradient(circle at 50% -10%, rgba(255,255,255,.08), transparent 28%), linear-gradient(135deg, rgba(255,255,255,.035), rgba(0,0,0,.12)), var(--felt); box-shadow:inset 0 0 0 1px rgba(0,0,0,.08), var(--shadow);}
+    .board{height:100%; padding:clamp(12px,1.5vw,18px); display:grid; grid-template-rows:var(--card-h) minmax(0,1fr); gap:clamp(16px,2.5vh,30px); justify-content:center; overflow:auto; overscroll-behavior:contain;}
+    .top-row{display:grid; grid-template-columns:repeat(2,var(--card-w)) minmax(10px,1fr) repeat(4,var(--card-w)); gap:var(--gap); align-items:start; width:min(100%, calc(var(--card-w)*7 + var(--gap)*6)); margin:0 auto;}
+    .tableau{display:grid; grid-template-columns:repeat(7,var(--card-w)); gap:var(--gap); width:min(100%, calc(var(--card-w)*7 + var(--gap)*6)); margin:0 auto; align-items:start; padding-bottom:40px;}
+    .pile{position:relative; width:var(--card-w); height:var(--card-h); border-radius:var(--radius);}
+    .pile.empty{border:2px dashed rgba(255,255,255,.18); background:rgba(0,0,0,.11); display:grid; place-items:center; color:rgba(255,255,255,.45); font-weight:800; letter-spacing:.08em; font-size:11px; text-transform:uppercase;}
+    body[data-theme="light"] .pile.empty, body[data-theme="kitty"] .pile.empty{border-color:rgba(15,23,42,.16); color:rgba(15,23,42,.42)}
+    .pile-label{position:absolute; left:0; right:0; top:-18px; text-align:center; color:var(--muted); font-size:10px; letter-spacing:.14em; text-transform:uppercase; pointer-events:none;}
+    .tableau .pile{height:calc(var(--card-h) + var(--fan-y)*11); min-height:var(--card-h);}
+    .card{position:absolute; left:0; top:0; width:var(--card-w); height:var(--card-h); border-radius:var(--radius); overflow:hidden; transform:translateZ(0); background:var(--card-face); color:var(--card-ink); box-shadow:0 9px 22px rgba(0,0,0,.24), inset 0 0 0 1px rgba(255,255,255,.55), inset 0 0 0 2px rgba(0,0,0,.05); cursor:pointer; transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;}
+    .tableau .card{top:calc(var(--fan-y) * var(--offset)); z-index:calc(5 + var(--offset));}
+    .card.face-up:hover,.card.selected{transform:translateY(-4px); box-shadow:0 16px 30px rgba(0,0,0,.32), 0 0 0 3px color-mix(in srgb, var(--accent) 80%, white 20%);}
+    .card.selected{animation:selectedPulse .85s ease-in-out infinite alternate;}
+    .card.hint-source,.pile.hint-target{box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 75%, white 25%), 0 0 34px color-mix(in srgb, var(--accent) 55%, transparent); animation:hintPulse .75s ease-in-out infinite alternate;}
+    .pile.hint-target{border-color:var(--accent)}
+    @keyframes selectedPulse{from{filter:brightness(1)}to{filter:brightness(1.08)}}
+    @keyframes hintPulse{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+    .card.red{--suit-color:var(--card-red)} .card.black{--suit-color:var(--card-black)}
+    .corner{position:absolute; display:flex; flex-direction:column; align-items:center; gap:1px; color:var(--suit-color); font-weight:1000; line-height:.88; text-shadow:0 1px 0 rgba(255,255,255,.2);}
+    .corner.top{top:6%; left:7%} .corner.bottom{right:7%; bottom:6%; transform:rotate(180deg)}
+    .rank{font-size:clamp(14px,1.7vw,25px); letter-spacing:-.08em}.suit{font-size:clamp(11px,1.1vw,17px)}
+    .pip-grid{position:absolute; inset:22% 18%; display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(4,1fr); place-items:center; color:var(--suit-color)}
+    .pip{font-size:clamp(16px,1.9vw,27px); line-height:1; filter:drop-shadow(0 1px 0 rgba(255,255,255,.22));}
+    .ace-pip{position:absolute; inset:25%; display:grid; place-items:center; color:var(--suit-color); font-size:clamp(34px,4vw,72px); filter:drop-shadow(0 5px 7px rgba(0,0,0,.16));}
+    .face-art{position:absolute; inset:19% 14%; border-radius:13px; overflow:hidden; display:grid; place-items:center; background:linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.02)); border:1px solid rgba(0,0,0,.08);}
+    .art-svg{width:100%; height:100%; display:block}.art-title{font:900 10px/1 system-ui; letter-spacing:.05em; text-transform:uppercase; fill:currentColor; opacity:.86}
+    .card-back{background:linear-gradient(135deg,var(--card-back-a),var(--card-back-b));}
+    .card-back::before{content:""; position:absolute; inset:8%; border-radius:calc(var(--radius) - 3px); border:2px solid rgba(255,255,255,.25); background:repeating-linear-gradient(45deg, rgba(255,255,255,.16) 0 4px, transparent 4px 10px), radial-gradient(circle at 50% 50%, rgba(255,255,255,.26), transparent 34%);}
+    .card-back::after{content:"A"; position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.75); font-weight:1000; font-size:clamp(28px,4vw,58px)}
+    body[data-theme="minecraft"] .card{image-rendering:pixelated; border-radius:8px; box-shadow:0 9px 0 rgba(0,0,0,.16), 0 12px 25px rgba(0,0,0,.25), inset 0 0 0 3px rgba(0,0,0,.12)}
+    body[data-theme="minecraft"] .card.face-up::before{content:"";position:absolute;inset:0;opacity:.12;background:linear-gradient(90deg,#000 1px,transparent 1px),linear-gradient(#000 1px,transparent 1px);background-size:10px 10px;pointer-events:none}
+    body[data-theme="minecraft"] .card-back::after{content:"⬚"; font-size:50px}
+    body[data-theme="halloween"] .card.face-up{box-shadow:0 10px 28px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,181,83,.15)}
+    body[data-theme="halloween"] .card.face-up::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,rgba(249,115,22,.12),transparent 18%),linear-gradient(180deg,transparent 70%,rgba(0,0,0,.18));pointer-events:none}
+    body[data-theme="kitty"] .card{border:2px solid rgba(244,114,182,.22)}
+    body[data-theme="kitty"] .card.face-up::before{content:"";position:absolute;inset:6%;border:1px solid rgba(244,114,182,.25);border-radius:12px;pointer-events:none}
+    body[data-theme="chernobyl"] .card.face-up{background:linear-gradient(135deg,#263022,#151c14); box-shadow:0 12px 28px rgba(0,0,0,.42), inset 0 0 20px rgba(182,255,57,.05), inset 0 0 0 1px rgba(182,255,57,.16)}
+    body[data-theme="sponge"] .card.face-up::before{content:"";position:absolute;inset:0;opacity:.14;background:radial-gradient(circle at 20% 30%,#0ea5b8 0 8%,transparent 8.5%),radial-gradient(circle at 70% 65%,#facc15 0 7%,transparent 7.5%);pointer-events:none}
+    .side{display:flex; flex-direction:column; gap:16px; min-height:0; overflow:auto; padding-right:2px;}
+    .panel{border-radius:22px; padding:20px; color:var(--text)}
+    .panel h2{font-size:20px; margin:0 0 10px}.panel p{margin:.45rem 0; color:var(--muted); line-height:1.45}.panel strong{color:var(--text)}
+    .how-list{margin:10px 0 0; padding-left:20px; color:var(--muted); line-height:1.45}.how-list li{margin:6px 0}
+    .toast{position:fixed; left:50%; bottom:max(18px,env(safe-area-inset-bottom)); transform:translate(-50%,20px); opacity:0; pointer-events:none; z-index:20; padding:13px 16px; border-radius:16px; max-width:min(620px,calc(100vw - 24px)); background:rgba(15,23,42,.92); color:#fff; border:1px solid rgba(255,255,255,.16); box-shadow:var(--shadow); transition:opacity .18s ease, transform .18s ease;}
+    .toast.show{opacity:1; transform:translate(-50%,0)}
+    .modal{position:fixed; inset:0; z-index:30; display:none; place-items:center; padding:22px; background:rgba(0,0,0,.45); backdrop-filter:blur(8px)}
+    .modal.show{display:grid}.modal-card{width:min(640px,100%); border-radius:26px; padding:26px}.modal-card h2{margin:0 0 12px; font-size:clamp(30px,5vw,56px); letter-spacing:-.04em}.modal-card p{color:var(--muted); line-height:1.45}.modal-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .ghost{position:fixed; pointer-events:none; z-index:99; width:var(--card-w); height:var(--card-h); opacity:.96; filter:drop-shadow(0 22px 22px rgba(0,0,0,.38));}
+    .ghost .card{position:absolute; top:calc(var(--fan-y) * var(--offset));}
+    .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:25}.confetti span{position:absolute; width:10px; height:16px; background:var(--accent); top:-20px; animation:fall 1.8s linear forwards; border-radius:2px}@keyframes fall{to{transform:translateY(110vh) rotate(720deg); opacity:.85}}
+    body[data-theme="minecraft"] .board-wrap{animation:mcIdle 6s steps(5,end) infinite}@keyframes mcIdle{50%{filter:saturate(1.1)}}
+    body[data-theme="halloween"] .board-wrap{animation:hFog 4s ease-in-out infinite alternate}@keyframes hFog{to{box-shadow:inset 0 0 50px rgba(168,85,247,.12), var(--shadow)}}
+    body[data-theme="kitty"] .primary{box-shadow:0 10px 30px rgba(244,114,182,.28)}
+    body[data-theme="chernobyl"] .board-wrap{animation:radiation 3.2s ease-in-out infinite alternate}@keyframes radiation{to{filter:sepia(.08) saturate(1.2); box-shadow:0 0 38px rgba(182,255,57,.10), var(--shadow)}}
+    body[data-theme="sponge"] .board-wrap{animation:bubbles 3s ease-in-out infinite alternate}@keyframes bubbles{to{filter:hue-rotate(8deg) brightness(1.05)}}
+    @media (max-width:1100px){html,body{overflow:auto}.app{height:auto; min-height:100svh; overflow:visible}.main{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;overflow:visible}.board-wrap{min-height:calc(var(--card-h) + var(--fan-y)*12 + 150px)}}
+    @media (max-width:700px){:root{--card-w:clamp(42px,12.2vw,55px);--fan-y:20px;--gap:5px}.app{padding:8px}.topbar{border-radius:18px; min-height:auto}.logo{width:50px;height:50px;font-size:30px}.brand p{display:none}.stats{gap:6px}.stat{min-width:64px;padding:8px 9px;border-radius:13px}.stat b{font-size:16px}.stat span{font-size:10px;margin-top:5px}.toolbar{align-items:stretch;flex-direction:column;border-radius:18px}.buttons{display:grid;grid-template-columns:repeat(3,1fr)}button,select{padding:0 9px;font-size:13px}.theme-picker{margin-left:0;justify-content:space-between}.theme-picker select{max-width:none;flex:1}.board{padding:22px 6px 10px; overflow:visible; justify-content:center}.top-row{grid-template-columns:repeat(2,var(--card-w)) 1fr repeat(4,var(--card-w));}.side{grid-template-columns:1fr}.panel{padding:15px;border-radius:18px}.corner.top{top:5%;left:8%}.corner.bottom{right:8%;bottom:5%}.rank{font-size:14px}.suit{font-size:10px}.face-art{inset:25% 13%}.pip-grid{inset:24% 16%}.pip{font-size:15px}.ace-pip{font-size:36px}.modal-card{padding:20px}.warm{grid-column:span 2}}
+    @media (max-width:380px){:root{--card-w:39px;--gap:4px;--fan-y:18px}.buttons{grid-template-columns:repeat(2,1fr)}.warm{grid-column:auto}.top-row,.tableau{width:100%; justify-content:center}}
+  </style>
 </head>
-<body class="theme-default">
-  <div class="bg-layer" aria-hidden="true"></div>
-  <main class="app-shell">
-    <header class="topbar">
-      <section class="brand">
-        <div class="app-icon mini-card" aria-hidden="true">A</div>
-        <div>
-          <h1>Косынка</h1>
-          <p id="themeTagline">Классический пасьянс без серверов и рекламы</p>
-        </div>
-      </section>
-      <section class="stats" aria-label="Статистика игры">
-        <div><span id="moves">0</span><small>ходы</small></div>
-        <div><span id="timer">00:00</span><small>время</small></div>
-        <div><span id="best">—</span><small>рекорд</small></div>
-      </section>
-    </header>
-
-    <nav class="toolbar" aria-label="Управление">
-      <button id="newGameBtn" class="primary">Новая игра</button>
-      <button id="restartBtn">Заново</button>
-      <button id="undoBtn">Отменить</button>
-      <button id="hintBtn">Подсказка</button>
-      <button id="rulesBtn">Как играть</button>
-      <button id="installBtn" class="install">Скачать приложение</button>
-      <button id="iosBtn">На iPhone</button>
-      <label class="theme-picker">Стиль
-        <select id="themeSelect" aria-label="Выбор темы">
-          <option value="default">Дефолтная</option>
-          <option value="light">Светлая</option>
-          <option value="dark">Темная</option>
-          <option value="minecraft">Minecraft style</option>
-          <option value="halloween">Halloween</option>
-          <option value="kitty">Hello Kitty style</option>
-          <option value="chernobyl">Чернобыль</option>
-          <option value="sponge">Губка-боб style</option>
-        </select>
-      </label>
-    </nav>
-
-    <section class="game-board" id="gameBoard" aria-label="Игровое поле Косынки">
-      <div class="top-row">
-        <div class="pile-wrap"><div class="pile-title">Колода</div><div id="stock" class="pile stock"></div></div>
-        <div class="pile-wrap"><div class="pile-title">Сброс</div><div id="waste" class="pile waste"></div></div>
-        <div class="spacer"></div>
-        <div class="foundation-zone" id="foundations"></div>
-      </div>
-      <div class="tableau" id="tableau"></div>
+<body data-theme="default">
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">A</div><div><h1>Косынка</h1><p>Полностью локальный пасьянс для GitHub Pages и iPhone Home Screen</p></div></div>
+    <div class="stats" aria-label="Статистика">
+      <div class="stat"><b id="moves">0</b><span>ходы</span></div>
+      <div class="stat"><b id="time">00:00</b><span>время</span></div>
+      <div class="stat"><b id="record">—</b><span>рекорд</span></div>
+    </div>
+  </header>
+  <nav class="toolbar" aria-label="Панель управления">
+    <div class="buttons">
+      <button class="primary" id="newGameBtn" type="button">Новая игра</button>
+      <button id="restartBtn" type="button">Заново</button>
+      <button id="undoBtn" type="button">Отменить</button>
+      <button id="hintBtn" type="button">Подсказка</button>
+      <button id="howBtn" type="button">Как играть</button>
+      <button class="warm" id="installBtn" type="button">Скачать приложение</button>
+      <button id="iosBtn" type="button">На iPhone</button>
+    </div>
+    <label class="theme-picker">Стиль
+      <select id="themeSelect" aria-label="Выбор темы">
+        <option value="default">Дефолтная</option>
+        <option value="light">Светлая</option>
+        <option value="dark">Темная</option>
+        <option value="minecraft">Minecraft style</option>
+        <option value="halloween">Halloween</option>
+        <option value="kitty">Hello Kitty style</option>
+        <option value="chernobyl">Чернобыль</option>
+        <option value="sponge">Губка-боб style</option>
+      </select>
+    </label>
+  </nav>
+  <main class="main">
+    <section class="board-wrap" aria-label="Игровое поле">
+      <div id="board" class="board"></div>
     </section>
-
-    <aside class="side-panel">
-      <section class="hint-card">
-        <h2>Подсказка</h2>
-        <p id="hintText">Нажми «Подсказка», и игра покажет возможный ход.</p>
-      </section>
-      <section class="theme-note">
-        <h2 id="themeTitle">Дефолтная тема</h2>
-        <p id="themeDescription">Классические масти: черные карты кладутся на красные и наоборот, по убыванию.</p>
-      </section>
+    <aside class="side">
+      <section class="panel"><h2>Подсказка</h2><p id="hintText">Нажми «Подсказка», и игра покажет возможный ход.</p></section>
+      <section class="panel"><h2 id="themeTitle">Дефолтная тема</h2><p id="themeText">Классические масти: черные карты кладутся на красные и наоборот, по убыванию.</p></section>
+      <section class="panel"><h2>Быстрые правила</h2><ul class="how-list" id="quickRules"></ul></section>
     </aside>
   </main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><h2 id="modalTitle">Косынка</h2><div id="modalBody"></div><div class="modal-actions" id="modalActions"></div></div></div>
+<div class="confetti" id="confetti"></div>
+<script>
+(() => {
+  'use strict';
 
-  <dialog id="modal">
-    <div class="modal-body">
-      <button class="close" id="closeModal" aria-label="Закрыть">×</button>
-      <h2 id="modalTitle"></h2>
-      <div id="modalContent"></div>
-    </div>
-  </dialog>
+  const SUITS = ['S','H','D','C'];
+  const SUIT_COLOR = {S:'black', C:'black', H:'red', D:'red'};
+  const RANK_LABEL = {1:'A',11:'J',12:'Q',13:'K'};
+  const STORE_KEY = 'klondike-redone-v2';
+  let deferredInstallPrompt = null;
+  let timer = null;
+  let drag = null;
+  let state = emptyState();
+  let initialSnapshot = null;
+  let selected = null;
+  let hintMark = null;
+  let suppressClickUntil = 0;
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js"></script>
+  const $ = (id) => document.getElementById(id);
+  const board = $('board');
+  const movesEl = $('moves');
+  const timeEl = $('time');
+  const recordEl = $('record');
+  const hintTextEl = $('hintText');
+  const themeTitleEl = $('themeTitle');
+  const themeTextEl = $('themeText');
+  const rulesEl = $('quickRules');
+  const modal = $('modal');
+  const modalTitle = $('modalTitle');
+  const modalBody = $('modalBody');
+  const modalActions = $('modalActions');
+  const confetti = $('confetti');
+
+  const THEMES = {
+    default: {
+      title:'Дефолтная тема',
+      text:'Классическая Косынка: черные карты кладутся на красные и наоборот, по убыванию. Тузы открывают домики мастей.',
+      rules:['Король открывает пустую колонку.','Валет, дама и король — обычные старшие карты.','Домик каждой масти собирается от A до K.'],
+      symbols:{S:'♠',H:'♥',D:'♦',C:'♣'},
+      names:{S:'пики',H:'черви',D:'буби',C:'крести'}
+    },
+    light: {
+      title:'Светлая тема', text:'Чистый светлый стол: правила те же, но оформление похоже на светлую тему компьютера.',
+      rules:['Темные масти чередуются со светло-красными.','На пустое место ставится только король.','Двойной клик или тап отправляет карту в домик, если можно.'],
+      symbols:{S:'♠',H:'♥',D:'♦',C:'♣'}, names:{S:'пики',H:'черви',D:'буби',C:'крести'}
+    },
+    dark: {
+      title:'Темная тема', text:'Ночной режим: приглушенный стол, контрастные масти и спокойная анимация подсветки.',
+      rules:['Карта идет на масть другого цвета и на ранг старше.','Из сброса можно брать только верхнюю карту.','Отмена возвращает состояние перед последним ходом.'],
+      symbols:{S:'♠',H:'♥',D:'♦',C:'♣'}, names:{S:'пики',H:'черви',D:'буби',C:'крести'}
+    },
+    minecraft: {
+      title:'Minecraft style', text:'Квадратный блочный стиль: красные биомы бьют темные шахты по классическому принципу чередования цветов.',
+      rules:['Пиксельный король занимает пустую колонку.','Алмазы и сердца чередуются с углем и лианами.','Домики собирают добычу от A до K.'],
+      symbols:{S:'▰',H:'♥',D:'◆',C:'▣'}, names:{S:'шахты',H:'сердца',D:'алмазы',C:'блоки'}
+    },
+    halloween: {
+      title:'Halloween', text:'Темная жуткая тема: пауки, летучие тени, тыквы и кровавые сердца. По силе карт все остается как в Косынке.',
+      rules:['Пауки и летучие тени считаются темными мастями.','Кровавые сердца и огненные ромбы считаются красными.','Пустую колонку занимает только король-тыква.'],
+      symbols:{S:'♠',H:'♥',D:'◆',C:'✦'}, names:{S:'пауки',H:'сердца',D:'огонь',C:'летучие тени'}
+    },
+    kitty: {
+      title:'Hello Kitty style', text:'Милая розовая тема с котиками, бантиками и пастельными рамками. Правила не меняются.',
+      rules:['Розовые масти чередуются с темно-сливовыми.','Король-котик открывает пустую колонку.','Подсказка подсвечивает карту и место, куда ее можно поставить.'],
+      symbols:{S:'♠',H:'♥',D:'♦',C:'♣'}, names:{S:'сливовые пики',H:'розовые сердца',D:'бантики',C:'лапки'}
+    },
+    chernobyl: {
+      title:'Чернобыль', text:'Мрачная зона отчуждения: радиация, руины, сталкеры и мутанты. В игре используются те же правила чередования.',
+      rules:['Желтые знаки и опасные ромбы играют как красные масти.','Темные зоны и мутанты играют как черные масти.','Домики — безопасные контейнеры от A до K.'],
+      symbols:{S:'☢',H:'♥',D:'◇',C:'✚'}, names:{S:'радиация',H:'сигнал',D:'аномалия',C:'зона'}
+    },
+    sponge: {
+      title:'Губка-боб style', text:'Подводный мультяшный стол: пузырьки, кораллы, желтая губка, морская звезда и кальмар-художник на старших картах.',
+      rules:['Синие морские масти чередуются с коралловыми.','Пустую колонку занимает только морской король.','Домики собираются от пузыря-A до K.'],
+      symbols:{S:'♠',H:'♥',D:'♦',C:'♣'}, names:{S:'морские пики',H:'коралловые сердца',D:'жемчуг',C:'пузырьки'}
+    }
+  };
+
+  function emptyState(){
+    return {stock:[], waste:[], foundations:{S:[],H:[],D:[],C:[]}, tableau:Array.from({length:7},()=>[]), moves:0, elapsed:0, theme:'default', status:'playing', history:[], seed:Date.now()};
+  }
+  function cloneCore(s=state){
+    return JSON.parse(JSON.stringify({stock:s.stock,waste:s.waste,foundations:s.foundations,tableau:s.tableau,moves:s.moves,elapsed:s.elapsed,theme:s.theme,status:s.status,seed:s.seed}));
+  }
+  function restoreCore(snap, keepHistory=true){
+    const hist = keepHistory ? state.history : [];
+    state = {...emptyState(), ...JSON.parse(JSON.stringify(snap)), history:hist};
+    selected = null; hintMark = null;
+    applyTheme(state.theme, false);
+    render(); updateStats();
+  }
+  function rankLabel(rank){ return RANK_LABEL[rank] || String(rank); }
+  function formatTime(sec){ const m = Math.floor(sec/60); const s = sec%60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+  function getRecord(theme=state.theme){ try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')[theme]||null}catch{return null} }
+  function setRecord(theme, data){ const all = JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); all[theme]=data; localStorage.setItem(STORE_KEY, JSON.stringify(all)); }
+  function updateStats(){ movesEl.textContent = state.moves; timeEl.textContent = formatTime(state.elapsed); const r = getRecord(); recordEl.textContent = r ? `${r.moves}` : '—'; $('undoBtn').disabled = state.history.length === 0; }
+  function pushHistory(){ state.history.push(cloneCore()); if(state.history.length>180) state.history.shift(); }
+  function afterAction(){ state.moves++; selected=null; hintMark=null; updateStats(); checkEnd(); render(); }
+
+  function newDeck(){
+    const deck=[];
+    for(const suit of SUITS){ for(let rank=1; rank<=13; rank++){ deck.push({id:`${suit}${rank}`, suit, rank, faceUp:false}); } }
+    for(let i=deck.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+    return deck;
+  }
+  function dealNew(){
+    state = emptyState();
+    state.theme = $('themeSelect').value || localStorage.getItem('klondike-theme') || 'default';
+    const deck = newDeck();
+    for(let c=0;c<7;c++){
+      for(let r=0;r<=c;r++){
+        const card = deck.pop();
+        card.faceUp = r===c;
+        state.tableau[c].push(card);
+      }
+    }
+    state.stock = deck.map(c => ({...c, faceUp:false}));
+    state.status='playing'; state.moves=0; state.elapsed=0; state.history=[];
+    initialSnapshot = cloneCore();
+    applyTheme(state.theme, false);
+    startTimer(); render(); updateStats();
+    hintTextEl.textContent = 'Игра готова. Тяни карту из колоды или нажми «Подсказка».';
+  }
+  function restartDeal(){ if(!initialSnapshot) return dealNew(); state.history=[]; restoreCore({...initialSnapshot, elapsed:0, moves:0, status:'playing'}, false); hintTextEl.textContent='Раздача начата заново.'; }
+  function startTimer(){ if(timer) clearInterval(timer); timer = setInterval(()=>{ if(state.status==='playing'){ state.elapsed++; updateStats(); } }, 1000); }
+
+  function applyTheme(theme, rerender=true){
+    state.theme = theme in THEMES ? theme : 'default';
+    document.body.dataset.theme = state.theme;
+    $('themeSelect').value = state.theme;
+    localStorage.setItem('klondike-theme', state.theme);
+    const t = THEMES[state.theme];
+    themeTitleEl.textContent = t.title; themeTextEl.textContent = t.text;
+    rulesEl.innerHTML = t.rules.map(x=>`<li>${x}</li>`).join('');
+    const color = getComputedStyle(document.body).getPropertyValue('--bg0').trim() || '#111827';
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
+    updateStats(); if(rerender) render();
+  }
+
+  function cardColor(card){ return SUIT_COLOR[card.suit]; }
+  function canPlaceOnTableau(cards, destPile){
+    const card = cards[0];
+    if(!destPile.length) return card.rank === 13;
+    const top = destPile[destPile.length-1];
+    return top.faceUp && cardColor(top)!==cardColor(card) && top.rank === card.rank + 1;
+  }
+  function canPlaceOnFoundation(card){
+    const pile = state.foundations[card.suit];
+    if(!pile.length) return card.rank === 1;
+    return pile[pile.length-1].rank + 1 === card.rank;
+  }
+  function sourceCards(from){
+    if(from.type==='waste'){ const c = state.waste[state.waste.length-1]; return c ? [c] : []; }
+    if(from.type==='foundation'){ const pile=state.foundations[from.suit]; const c=pile[pile.length-1]; return c ? [c] : []; }
+    if(from.type==='tableau'){ const pile=state.tableau[from.pile]; const slice=pile.slice(from.index); return slice[0]?.faceUp ? slice : []; }
+    return [];
+  }
+  function moveCards(from, to, options={countMove:true}){
+    if(state.status!=='playing') return false;
+    const moving = sourceCards(from);
+    if(!moving.length) return false;
+    if(to.type==='foundation'){
+      if(moving.length!==1 || !canPlaceOnFoundation(moving[0])) return false;
+    } else if(to.type==='tableau'){
+      if(from.type==='tableau' && from.pile===to.pile) return false;
+      if(!canPlaceOnTableau(moving, state.tableau[to.pile])) return false;
+    } else return false;
+    pushHistory();
+    if(from.type==='waste') state.waste.pop();
+    if(from.type==='foundation') state.foundations[from.suit].pop();
+    if(from.type==='tableau') state.tableau[from.pile].splice(from.index);
+    if(to.type==='foundation') state.foundations[moving[0].suit].push(...moving);
+    if(to.type==='tableau') state.tableau[to.pile].push(...moving);
+    if(from.type==='tableau') flipTopIfNeeded(from.pile);
+    if(options.countMove) afterAction(); else render();
+    return true;
+  }
+  function flipTopIfNeeded(pileIndex){
+    const pile = state.tableau[pileIndex];
+    const top = pile[pile.length-1];
+    if(top && !top.faceUp) top.faceUp = true;
+  }
+  function drawStock(){
+    if(state.status!=='playing') return;
+    if(state.stock.length){
+      pushHistory(); const card=state.stock.pop(); card.faceUp=true; state.waste.push(card); afterAction(); return;
+    }
+    if(state.waste.length){
+      pushHistory(); state.stock = state.waste.reverse().map(c=>({...c,faceUp:false})); state.waste=[]; afterAction(); return;
+    }
+    showToast('Колода пуста.');
+  }
+  function undo(){
+    if(!state.history.length) return showToast('Отменять нечего.');
+    const snap = state.history.pop(); restoreCore(snap, true); hintTextEl.textContent='Ход отменен.';
+  }
+
+  function getFromDataset(el){
+    if(!el) return null;
+    const type = el.dataset.source;
+    if(!type) return null;
+    if(type==='waste') return {type:'waste'};
+    if(type==='foundation') return {type:'foundation', suit:el.dataset.suit};
+    if(type==='tableau') return {type:'tableau', pile:Number(el.dataset.pile), index:Number(el.dataset.index)};
+    return null;
+  }
+  function getTargetFromElement(el){
+    const card = el?.closest?.('.card');
+    if(card){
+      const pile = card.closest('.pile');
+      if(pile?.dataset.pileType==='tableau') return {type:'tableau', pile:Number(pile.dataset.pile)};
+      if(pile?.dataset.pileType==='foundation') return {type:'foundation', suit:pile.dataset.suit};
+    }
+    const pile = el?.closest?.('.pile');
+    if(!pile) return null;
+    if(pile.dataset.pileType==='tableau') return {type:'tableau', pile:Number(pile.dataset.pile)};
+    if(pile.dataset.pileType==='foundation') return {type:'foundation', suit:pile.dataset.suit};
+    if(pile.dataset.pileType==='stock') return {type:'stock'};
+    return null;
+  }
+  function handleCardTap(cardEl){
+    if(state.status!=='playing') return;
+    const from = getFromDataset(cardEl);
+    if(!from) return;
+    const cards = sourceCards(from);
+    if(!cards.length || !cards[0].faceUp) return;
+    const now = Date.now();
+    const sameAsLast = cardEl.dataset.lastTap && now-Number(cardEl.dataset.lastTap)<300;
+    cardEl.dataset.lastTap = now;
+    if(sameAsLast && cards.length===1 && moveCards(from,{type:'foundation'})) return;
+    if(selected){
+      const targetCard = cardEl;
+      const target = getTargetFromElement(targetCard);
+      if(target && moveCards(selected, target)) return;
+      selected=null;
+    } else {
+      selected = from;
+    }
+    render();
+  }
+  function handlePileTap(pileEl){
+    if(!selected) return;
+    const target = getTargetFromElement(pileEl);
+    if(target && moveCards(selected,target)) return;
+    selected=null; render();
+  }
+  function autoMove(from){
+    if(moveCards(from,{type:'foundation'})) return true;
+    const moving = sourceCards(from);
+    if(!moving.length) return false;
+    for(let i=0;i<7;i++){ if(moveCards(from,{type:'tableau', pile:i})) return true; }
+    return false;
+  }
+
+  function possibleMoves(){
+    const moves=[];
+    const waste = state.waste[state.waste.length-1];
+    if(waste){
+      const from={type:'waste'};
+      if(canPlaceOnFoundation(waste)) moves.push({from,to:{type:'foundation'}, text:`Положи ${nameCard(waste)} в домик ${THEMES[state.theme].names[waste.suit]}.`});
+      for(let i=0;i<7;i++){ if(canPlaceOnTableau([waste], state.tableau[i])) moves.push({from,to:{type:'tableau',pile:i}, text:`Положи ${nameCard(waste)} из сброса в ${i+1}-ю колонку.`}); }
+    }
+    for(let p=0;p<7;p++){
+      const pile=state.tableau[p];
+      for(let idx=0; idx<pile.length; idx++){
+        const card=pile[idx]; if(!card.faceUp) continue;
+        const stack=pile.slice(idx);
+        const from={type:'tableau', pile:p, index:idx};
+        if(stack.length===1 && canPlaceOnFoundation(card)) moves.push({from,to:{type:'foundation'}, text:`Отправь ${nameCard(card)} из ${p+1}-й колонки в домик.`});
+        for(let d=0; d<7; d++){
+          if(d===p) continue;
+          if(canPlaceOnTableau(stack, state.tableau[d])) moves.push({from,to:{type:'tableau',pile:d}, text:`Перенеси ${nameCard(card)}${stack.length>1?' со стопкой':''} из ${p+1}-й колонки в ${d+1}-ю.`});
+        }
+      }
+    }
+    for(const suit of SUITS){
+      const pile=state.foundations[suit]; const c=pile[pile.length-1];
+      if(!c) continue;
+      const from={type:'foundation', suit};
+      for(let d=0; d<7; d++) if(canPlaceOnTableau([c], state.tableau[d])) moves.push({from,to:{type:'tableau',pile:d}, text:`Можно вернуть ${nameCard(c)} из домика в ${d+1}-ю колонку.`});
+    }
+    if(!moves.length && (state.stock.length || state.waste.length)) moves.push({from:{type:'stock'}, to:null, text: state.stock.length ? 'Открой карту из колоды.' : 'Переложи сброс обратно в колоду.'});
+    return moves;
+  }
+  function showHint(){
+    if(state.status!=='playing') return;
+    const moves = possibleMoves();
+    if(!moves.length){
+      state.status='lost'; render(); openEndModal(false); return;
+    }
+    const move = moves[0]; hintMark = move;
+    hintTextEl.textContent = move.text;
+    render();
+  }
+  function nameCard(card){ return `${rankLabel(card.rank)} ${THEMES[state.theme].symbols[card.suit]}`; }
+  function checkEnd(){
+    const won = SUITS.every(s => state.foundations[s].length===13);
+    if(won){
+      state.status='won';
+      const r = getRecord();
+      if(!r || state.moves<r.moves || (state.moves===r.moves && state.elapsed<r.elapsed)) setRecord(state.theme,{moves:state.moves,elapsed:state.elapsed,date:new Date().toISOString()});
+      updateStats(); openEndModal(true); celebrate(); return;
+    }
+    if(!state.stock.length && !state.waste.length && possibleMoves().length===0){ state.status='lost'; openEndModal(false); }
+  }
+  function openEndModal(won){
+    modalTitle.textContent = won ? 'You won' : 'Game over';
+    modalBody.innerHTML = won ? `<p><strong>Победа!</strong> Ты собрал все домики за ${state.moves} ходов и ${formatTime(state.elapsed)}.</p>` : '<p><strong>Ходов больше нет.</strong> Раздачу можно начать заново или открыть новую игру.</p>';
+    modalActions.innerHTML = `<button class="primary" id="modalNew">Новая игра</button><button id="modalRestart">Заново</button><button id="modalClose">Закрыть</button>`;
+    $('modalNew').onclick = ()=>{ closeModal(); dealNew(); };
+    $('modalRestart').onclick = ()=>{ closeModal(); restartDeal(); };
+    $('modalClose').onclick = closeModal;
+    modal.classList.add('show');
+  }
+  function closeModal(){ modal.classList.remove('show'); }
+  function showToast(text){ const t=$('toast'); t.textContent=text; t.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>t.classList.remove('show'),2600); }
+  function celebrate(){
+    confetti.innerHTML='';
+    for(let i=0;i<70;i++){
+      const s=document.createElement('span'); s.style.left=Math.random()*100+'%'; s.style.animationDelay=(Math.random()*0.9)+'s'; s.style.transform=`rotate(${Math.random()*360}deg)`; s.style.background=i%3===0?'var(--accent)':i%3===1?'var(--accent2)':'var(--good)'; confetti.appendChild(s);
+    }
+    setTimeout(()=>confetti.innerHTML='',3000);
+  }
+
+  function render(){
+    updateStats();
+    const t = THEMES[state.theme];
+    board.innerHTML = `
+      <div class="top-row">
+        ${renderPile('stock',0,'колода')}
+        ${renderPile('waste',0,'сброс')}
+        <div></div>
+        ${SUITS.map(s=>renderPile('foundation',s,t.symbols[s])).join('')}
+      </div>
+      <div class="tableau">
+        ${state.tableau.map((_,i)=>renderPile('tableau',i,'')).join('')}
+      </div>`;
+    bindBoardEvents();
+  }
+  function renderPile(type, key, label){
+    if(type==='stock'){
+      const content = state.stock.length ? renderCard(state.stock[state.stock.length-1],{source:'stock', faceDown:true}) : '';
+      return `<div class="pile empty" data-pile-type="stock" id="pile-stock"><div class="pile-label">колода</div>${content || (state.waste.length?'↺':'')}</div>`;
+    }
+    if(type==='waste'){
+      const card=state.waste[state.waste.length-1];
+      return `<div class="pile empty" data-pile-type="waste" id="pile-waste"><div class="pile-label">сброс</div>${card?renderCard(card,{source:'waste'}):''}</div>`;
+    }
+    if(type==='foundation'){
+      const pile=state.foundations[key]; const top=pile[pile.length-1];
+      const hintClass = isHintTarget({type:'foundation', suit:key})?' hint-target':'';
+      return `<div class="pile empty${hintClass}" data-pile-type="foundation" data-suit="${key}" id="pile-foundation-${key}"><div class="pile-label">${label}</div>${top?renderCard(top,{source:'foundation', suit:key}):THEMES[state.theme].symbols[key]}</div>`;
+    }
+    if(type==='tableau'){
+      const pile=state.tableau[key]; const hintClass = isHintTarget({type:'tableau', pile:key})?' hint-target':'';
+      return `<div class="pile empty${hintClass}" data-pile-type="tableau" data-pile="${key}" id="pile-tableau-${key}">${pile.map((card,idx)=>renderCard(card,{source:'tableau', pile:key, index:idx, offset:idx})).join('')}</div>`;
+    }
+  }
+  function renderCard(card, meta){
+    const source = meta.source;
+    const faceDown = meta.faceDown || !card.faceUp;
+    const selectedClass = selected && sameSource(selected, meta) ? ' selected' : '';
+    const hintClass = hintMark && sameSource(hintMark.from, meta) ? ' hint-source' : '';
+    const cls = `card ${faceDown?'card-back':'face-up'} ${cardColor(card)}${selectedClass}${hintClass}`;
+    const data = `data-source="${source}" ${meta.pile!==undefined?`data-pile="${meta.pile}"`:''} ${meta.index!==undefined?`data-index="${meta.index}"`:''} ${meta.suit?`data-suit="${meta.suit}"`:''}`;
+    const style = `style="--offset:${meta.offset||0}"`;
+    if(faceDown) return `<div class="${cls}" ${data} ${style} aria-label="Закрытая карта"></div>`;
+    const sym = THEMES[state.theme].symbols[card.suit];
+    return `<div class="${cls}" ${data} ${style} aria-label="${nameCard(card)}">
+      <div class="corner top"><span class="rank">${rankLabel(card.rank)}</span><span class="suit">${sym}</span></div>
+      <div class="corner bottom"><span class="rank">${rankLabel(card.rank)}</span><span class="suit">${sym}</span></div>
+      ${centerHTML(card)}
+    </div>`;
+  }
+  function sameSource(a,b){
+    if(!a||!b) return false;
+    if(a.type && b.source && a.type!==b.source) return false;
+    const type = a.type || b.source;
+    if(type==='waste') return b.source==='waste';
+    if(type==='foundation') return (a.suit||b.suit)===(b.suit||a.suit);
+    if(type==='tableau') return Number(a.pile)===Number(b.pile) && Number(a.index)===Number(b.index);
+    if(type==='stock') return b.source==='stock';
+    return false;
+  }
+  function isHintTarget(target){
+    if(!hintMark || !hintMark.to || target.type!==hintMark.to.type) return false;
+    if(target.type==='foundation') return target.suit===hintMark.from?.suit || !hintMark.to.suit || target.suit===hintMark.to.suit;
+    if(target.type==='tableau') return target.pile===hintMark.to.pile;
+    return false;
+  }
+  function centerHTML(card){
+    if(card.rank===1) return `<div class="ace-pip">${THEMES[state.theme].symbols[card.suit]}</div>`;
+    if(card.rank>10) return `<div class="face-art">${artSVG(card)}</div>`;
+    return pipGrid(card);
+  }
+  function pipGrid(card){
+    const sym = THEMES[state.theme].symbols[card.suit];
+    const patterns = {
+      2:[[2,1],[2,4]],3:[[2,1],[2,2],[2,4]],4:[[1,1],[3,1],[1,4],[3,4]],5:[[1,1],[3,1],[2,2],[1,4],[3,4]],
+      6:[[1,1],[3,1],[1,2],[3,2],[1,4],[3,4]],7:[[1,1],[3,1],[2,2],[1,3],[3,3],[1,4],[3,4]],8:[[1,1],[3,1],[1,2],[3,2],[1,3],[3,3],[1,4],[3,4]],
+      9:[[1,1],[3,1],[1,2],[3,2],[2,2],[1,3],[3,3],[1,4],[3,4]],10:[[1,1],[3,1],[2,1],[1,2],[3,2],[1,3],[3,3],[2,4],[1,4],[3,4]]
+    };
+    return `<div class="pip-grid">${patterns[card.rank].map(([c,r])=>`<span class="pip" style="grid-column:${c};grid-row:${r}">${sym}</span>`).join('')}</div>`;
+  }
+  function artSVG(card){
+    const theme = state.theme; const rank=card.rank; const color = cardColor(card)==='red' ? 'var(--card-red)' : 'var(--card-black)';
+    if(theme==='minecraft') return pixelArt(rank, color);
+    if(theme==='halloween') return halloweenArt(rank, color);
+    if(theme==='kitty') return kittyArt(rank, color);
+    if(theme==='chernobyl') return chernobylArt(rank, color);
+    if(theme==='sponge') return spongeArt(rank, color);
+    if(theme==='dark') return classicArt(rank, color, true);
+    return classicArt(rank, color, false);
+  }
+  function classicArt(rank,color,dark){ const label = rank===13?'KING':rank===12?'QUEEN':'JACK'; const bg=dark?'#0f172a':'#f8fafc'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="${bg}" opacity=".55"/><path d="M24 88h72l-8-48-18 18-10-26-10 26-18-18z" fill="currentColor" opacity=".88"/><circle cx="60" cy="36" r="15" fill="currentColor" opacity=".65"/><text x="60" y="106" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function pixelArt(rank,color){ const label=rank===13?'BLOCK KING':rank===12?'ARCHER':'MINER'; const head=rank===13?'#8b5cf6':rank===12?'#fb923c':'#64748b'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}" shape-rendering="crispEdges"><rect width="120" height="120" fill="#efe8cf"/><rect x="30" y="18" width="60" height="18" fill="#facc15"/><rect x="42" y="36" width="36" height="30" fill="${head}"/><rect x="48" y="46" width="8" height="8" fill="#111"/><rect x="65" y="46" width="8" height="8" fill="#111"/><rect x="36" y="66" width="48" height="30" fill="#2f855a"/><rect x="24" y="72" width="18" height="18" fill="#8b5a2b"/><rect x="78" y="72" width="18" height="18" fill="#8b5a2b"/><rect x="22" y="26" width="76" height="5" fill="#000" opacity=".15"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function halloweenArt(rank,color){ const label=rank===13?'PUMPKIN':rank===12?'WITCH':'SKELETON'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="#1d0728"/><circle cx="60" cy="45" r="24" fill="${rank===13?'#f97316':rank===12?'#a855f7':'#e5e7eb'}"/><path d="M36 34h48l-17-20H53z" fill="#111827" opacity="${rank===12?1:.35}"/><path d="M48 46l9 7-9 7M72 46l-9 7 9 7" stroke="#111" stroke-width="4" fill="none"/><path d="M38 82c16 18 45 18 60 0" stroke="currentColor" stroke-width="10" stroke-linecap="round"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function kittyArt(rank,color){ const label=rank===13?'CAT KING':rank===12?'CAT QUEEN':'BOW PAL'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="18" fill="#fff0f7"/><path d="M36 49L28 24l24 12M84 49l8-25-24 12" fill="#fff" stroke="#7c335f" stroke-width="3"/><circle cx="60" cy="59" r="30" fill="#fff" stroke="#7c335f" stroke-width="3"/><circle cx="50" cy="58" r="3" fill="#111"/><circle cx="70" cy="58" r="3" fill="#111"/><path d="M58 67h4M48 75c8 5 16 5 24 0" stroke="#7c335f" stroke-width="3" fill="none"/><path d="M75 30l12-9 10 12-12 9zM87 33l13-8 4 15-16 2z" fill="#fb8ac0"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function chernobylArt(rank,color){ const label=rank===13?'STALKER':rank===12?'SCIENTIST':'MUTANT'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="#11180f"/><circle cx="60" cy="44" r="25" fill="#2f3b2a" stroke="#b6ff39" stroke-width="3" opacity=".9"/><circle cx="50" cy="42" r="8" fill="#b6ff39" opacity=".5"/><circle cx="70" cy="42" r="8" fill="#b6ff39" opacity=".5"/><rect x="54" y="55" width="12" height="20" rx="5" fill="#1f2937"/><path d="M30 94l14-32h32l14 32" fill="#4b5563"/><path d="M60 17v18M42 27l14 11M78 27L64 38" stroke="#facc15" stroke-width="4"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function spongeArt(rank,color){ const label=rank===13?'SEA KING':rank===12?'STAR PAL':'SQUID ART'; const body=rank===12?'#fda4af':rank===11?'#93c5fd':'#facc15'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="18" fill="#dffbff"/><circle cx="28" cy="26" r="7" fill="#67e8f9" opacity=".55"/><circle cx="93" cy="34" r="10" fill="#67e8f9" opacity=".45"/><rect x="38" y="28" width="44" height="50" rx="12" fill="${body}" stroke="#07364d" stroke-width="3"/><circle cx="51" cy="50" r="5" fill="#fff"/><circle cx="69" cy="50" r="5" fill="#fff"/><circle cx="51" cy="50" r="2" fill="#07364d"/><circle cx="69" cy="50" r="2" fill="#07364d"/><path d="M50 66c7 5 14 5 20 0" stroke="#07364d" stroke-width="3" fill="none"/><path d="M41 23h38l-10-12-9 12-9-12z" fill="#fde047" opacity="${rank===13?1:.25}"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+
+  function bindBoardEvents(){
+    board.querySelectorAll('.card').forEach(card=>{
+      if(card.dataset.source!=='stock') card.addEventListener('pointerdown', pointerDown, {passive:false});
+      card.addEventListener('click', (e)=>{ e.stopPropagation(); if(Date.now()<suppressClickUntil) return; if(card.dataset.source==='stock'){ drawStock(); return; } if(!drag) handleCardTap(card); });
+    });
+    board.querySelectorAll('.pile').forEach(pile=>{
+      pile.addEventListener('click',(e)=>{ if(e.target.closest('.card')) return; if(pile.dataset.pileType==='stock'){ drawStock(); return; } handlePileTap(pile); });
+    });
+  }
+  function pointerDown(e){
+    if(e.button!==undefined && e.button!==0) return;
+    const el = e.currentTarget;
+    if(!el.classList.contains('face-up')) return;
+    const from = getFromDataset(el); const cards = sourceCards(from); if(!cards.length) return;
+    e.preventDefault();
+    drag = {from, startX:e.clientX, startY:e.clientY, x:e.clientX, y:e.clientY, active:false, cardEl:el, cards};
+    window.addEventListener('pointermove', pointerMove, {passive:false});
+    window.addEventListener('pointerup', pointerUp, {once:true});
+  }
+  function pointerMove(e){
+    if(!drag) return;
+    const dx=e.clientX-drag.startX, dy=e.clientY-drag.startY;
+    if(!drag.active && Math.hypot(dx,dy)>8){ drag.active=true; createGhost(); }
+    if(drag.active){ e.preventDefault(); drag.x=e.clientX; drag.y=e.clientY; moveGhost(); }
+  }
+  function pointerUp(e){
+    window.removeEventListener('pointermove', pointerMove);
+    if(!drag) return;
+    const wasActive = drag.active;
+    let moved=false;
+    if(wasActive){
+      const ghost = document.querySelector('.ghost'); if(ghost) ghost.style.display='none';
+      const targetEl = document.elementFromPoint(e.clientX,e.clientY);
+      const target = getTargetFromElement(targetEl);
+      if(target) moved = moveCards(drag.from,target);
+      document.querySelector('.ghost')?.remove();
+    }
+    const cardEl=drag.cardEl; drag=null; suppressClickUntil=Date.now()+280;
+    if(!wasActive && cardEl) handleCardTap(cardEl);
+    if(wasActive && !moved) showToast('Сюда поставить нельзя.');
+  }
+  function createGhost(){
+    const g=document.createElement('div'); g.className='ghost';
+    g.innerHTML = drag.cards.map((c,i)=>renderCard(c,{source:'ghost', offset:i})).join('');
+    document.body.appendChild(g); moveGhost();
+  }
+  function moveGhost(){ const g=document.querySelector('.ghost'); if(!g||!drag) return; const w=drag.cardEl?.getBoundingClientRect?.().width || 70; g.style.left=(drag.x-w/2)+'px'; g.style.top=(drag.y-30)+'px'; }
+
+  function openHow(){
+    const t=THEMES[state.theme];
+    modalTitle.textContent='Как играть';
+    modalBody.innerHTML=`<p><strong>${t.title}.</strong> ${t.text}</p><ul class="how-list"><li>Нажми на карту, затем на колонку или домик. На компьютере можно перетаскивать мышью.</li><li>Колонки собираются по убыванию: K, Q, J, 10… и обязательно с чередованием цветов.</li><li>Домики справа сверху собираются по мастям от A до K.</li><li>Кнопка «Заново» перезапускает текущую раздачу, «Новая игра» создает новую.</li><li>Победа показывает <strong>You won</strong>, проигрыш без ходов — <strong>Game over</strong>.</li></ul>`;
+    modalActions.innerHTML='<button class="primary" id="modalOk">Понятно</button>'; $('modalOk').onclick=closeModal; modal.classList.add('show');
+  }
+  function openIOS(){
+    modalTitle.textContent='Как вывести на экран iPhone';
+    modalBody.innerHTML='<ol class="how-list"><li>Открой сайт в Safari.</li><li>Нажми кнопку «Поделиться».</li><li>Выбери «На экран Домой».</li><li>Нажми «Добавить». Иконка появится как обычное приложение.</li></ol><p>Все файлы локальные, поэтому после первого открытия приложение сможет запускаться быстрее и частично офлайн.</p>';
+    modalActions.innerHTML='<button class="primary" id="modalOk">Готово</button>'; $('modalOk').onclick=closeModal; modal.classList.add('show');
+  }
+  async function installOrDownload(){
+    if(deferredInstallPrompt){
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice.catch(()=>null);
+      deferredInstallPrompt=null; return;
+    }
+    const html='<!doctype html>\n'+document.documentElement.outerHTML;
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='kosynka-pwa-offline.html'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    showToast('Если браузер не предложил установить PWA, скачан автономный HTML-файл.');
+  }
+
+  $('newGameBtn').onclick=dealNew; $('restartBtn').onclick=restartDeal; $('undoBtn').onclick=undo; $('hintBtn').onclick=showHint; $('howBtn').onclick=openHow; $('iosBtn').onclick=openIOS; $('installBtn').onclick=installOrDownload;
+  $('themeSelect').addEventListener('change', e=>{ applyTheme(e.target.value); hintTextEl.textContent='Тема изменена. Правила этой темы справа.'; });
+  modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+  window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredInstallPrompt=e; $('installBtn').textContent='Установить приложение'; });
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){ e.preventDefault(); undo(); } if(e.key.toLowerCase()==='h') showHint(); });
+  if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  applyTheme(localStorage.getItem('klondike-theme')||'default', false);
+  dealNew();
+})();
+</script>
 </body>
 </html>
