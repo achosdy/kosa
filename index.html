@@ -75,7 +75,26 @@
     select{background:#111827; color:white; max-width:210px; outline:0}
     body[data-theme="light"] select,body[data-theme="kitty"] select{background:#fff; color:#111827}
     .main{display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:clamp(10px,1.4vw,18px); min-height:0;}
-    .board-wrap{position:relative; min-width:0; border-radius:26px; overflow:hidden; border:1px solid rgba(255,255,255,.11); background:radial-gradient(circle at 50% -10%, rgba(255,255,255,.08), transparent 28%), linear-gradient(135deg, rgba(255,255,255,.035), rgba(0,0,0,.12)), var(--felt); box-shadow:inset 0 0 0 1px rgba(0,0,0,.08), var(--shadow);}
+    .board-wrap{position:relative; min-width:0; border-radius:26px; overflow:hidden; border:1px solid rgba(255,255,255,.11); background:var(--felt); box-shadow:inset 0 0 0 1px rgba(0,0,0,.08), var(--shadow);}
+    .board-wrap::before,.board-wrap::after{content:""; position:absolute; inset:0; pointer-events:none;}
+    .board-wrap::before{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.18));}
+    .board-wrap::after{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));}
+    body[data-theme="default"] .board-wrap::before{background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(230,236,243,.78)),url("assets/themes/default-ref.jpg") center/cover no-repeat;filter:saturate(1.02) brightness(1.05);}
+    body[data-theme="light"] .board-wrap::before{background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(238,242,248,.84)),url("assets/themes/light-ref.jpg") center/cover no-repeat;filter:saturate(1.03) brightness(1.05);}
+    body[data-theme="dark"] .board-wrap::before{background:linear-gradient(180deg,rgba(5,8,16,.58),rgba(5,8,16,.84)),url("assets/themes/dark-ref.jpg") center/cover no-repeat;filter:saturate(.92) brightness(.55);}
+    body[data-theme="minecraft"] .board-wrap::before{background:linear-gradient(180deg,rgba(18,44,16,.10),rgba(15,32,13,.34)),url("assets/themes/minecraft-ref.jpg") center/cover no-repeat;filter:saturate(1.08) contrast(1.03);}
+    body[data-theme="halloween"] .board-wrap::before{background:linear-gradient(180deg,rgba(47,16,74,.08),rgba(0,0,0,.32)),url("assets/themes/halloween-ref.png") center/cover no-repeat;filter:saturate(1.08) contrast(1.02);}
+    body[data-theme="kitty"] .board-wrap::before{background:linear-gradient(180deg,rgba(255,248,252,.28),rgba(255,213,233,.66)),url("assets/themes/kitty-ref.jpg") center/cover no-repeat;filter:saturate(1.10);}
+    body[data-theme="chernobyl"] .board-wrap::before{background:linear-gradient(180deg,rgba(11,17,8,.18),rgba(0,0,0,.68)),url("assets/themes/chernobyl-ref.jpg") center/cover no-repeat;filter:saturate(.95) contrast(1.05);}
+    body[data-theme="sponge"] .board-wrap::before{background:linear-gradient(180deg,rgba(13,161,200,.06),rgba(0,94,135,.28)),url("assets/themes/sponge-ref.jpg") center/cover no-repeat;filter:saturate(1.08);}
+    body[data-theme="default"] .board-wrap::after{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.16));}
+    body[data-theme="light"] .board-wrap::after{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.26));}
+    body[data-theme="dark"] .board-wrap::after{background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.36));}
+    body[data-theme="minecraft"] .board-wrap::after{background:linear-gradient(180deg,rgba(14,34,12,.10),rgba(10,24,10,.30));}
+    body[data-theme="halloween"] .board-wrap::after{background:radial-gradient(circle at 22% 88%,rgba(255,112,23,.12),transparent 18%),linear-gradient(180deg,rgba(38,3,54,.06),rgba(9,0,15,.44));}
+    body[data-theme="kitty"] .board-wrap::after{background:radial-gradient(circle at 22% 16%,rgba(255,255,255,.28),transparent 22%),linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,196,225,.26));}
+    body[data-theme="chernobyl"] .board-wrap::after{background:radial-gradient(circle at 55% 18%,rgba(190,255,51,.09),transparent 24%),linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.52));}
+    body[data-theme="sponge"] .board-wrap::after{background:radial-gradient(circle at 70% 12%,rgba(255,255,255,.15),transparent 18%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,60,92,.25));}
     .board{height:100%; padding:clamp(12px,1.5vw,18px); display:grid; grid-template-rows:var(--card-h) minmax(0,1fr); gap:clamp(16px,2.5vh,30px); justify-content:center; overflow:auto; overscroll-behavior:contain;}
     .top-row{display:grid; grid-template-columns:repeat(2,var(--card-w)) minmax(10px,1fr) repeat(4,var(--card-w)); gap:var(--gap); align-items:start; width:min(100%, calc(var(--card-w)*7 + var(--gap)*6)); margin:0 auto;}
     .tableau{display:grid; grid-template-columns:repeat(7,var(--card-w)); gap:var(--gap); width:min(100%, calc(var(--card-w)*7 + var(--gap)*6)); margin:0 auto; align-items:start; padding-bottom:40px;}
@@ -101,6 +120,9 @@
     .ace-pip{position:absolute; inset:25%; display:grid; place-items:center; color:var(--suit-color); font-size:clamp(34px,4vw,72px); filter:drop-shadow(0 5px 7px rgba(0,0,0,.16));}
     .face-art{position:absolute; inset:19% 14%; border-radius:13px; overflow:hidden; display:grid; place-items:center; background:linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.02)); border:1px solid rgba(0,0,0,.08);}
     .art-svg{width:100%; height:100%; display:block}.art-title{font:900 10px/1 system-ui; letter-spacing:.05em; text-transform:uppercase; fill:currentColor; opacity:.86}
+    .art-photo{position:relative; width:100%; height:100%; background:center/cover no-repeat; image-rendering:auto;}
+    .art-photo::after{content:attr(data-label); position:absolute; left:4px; right:4px; bottom:3px; padding:2px 4px; border-radius:999px; background:rgba(255,255,255,.88); color:#111827; font:900 7px/1 Inter,system-ui,sans-serif; letter-spacing:.08em; text-align:center; text-transform:uppercase; box-shadow:0 1px 3px rgba(0,0,0,.15);}
+    body[data-theme="dark"] .art-photo::after, body[data-theme="chernobyl"] .art-photo::after, body[data-theme="halloween"] .art-photo::after{background:rgba(17,24,39,.86); color:#f8fafc;}
     .card-back{background:linear-gradient(135deg,var(--card-back-a),var(--card-back-b));}
     .card-back::before{content:""; position:absolute; inset:8%; border-radius:calc(var(--radius) - 3px); border:2px solid rgba(255,255,255,.25); background:repeating-linear-gradient(45deg, rgba(255,255,255,.16) 0 4px, transparent 4px 10px), radial-gradient(circle at 50% 50%, rgba(255,255,255,.26), transparent 34%);}
     .card-back::after{content:"A"; position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.75); font-weight:1000; font-size:clamp(28px,4vw,58px)}
@@ -113,6 +135,13 @@
     body[data-theme="kitty"] .card.face-up::before{content:"";position:absolute;inset:6%;border:1px solid rgba(244,114,182,.25);border-radius:12px;pointer-events:none}
     body[data-theme="chernobyl"] .card.face-up{background:linear-gradient(135deg,#263022,#151c14); box-shadow:0 12px 28px rgba(0,0,0,.42), inset 0 0 20px rgba(182,255,57,.05), inset 0 0 0 1px rgba(182,255,57,.16)}
     body[data-theme="sponge"] .card.face-up::before{content:"";position:absolute;inset:0;opacity:.14;background:radial-gradient(circle at 20% 30%,#0ea5b8 0 8%,transparent 8.5%),radial-gradient(circle at 70% 65%,#facc15 0 7%,transparent 7.5%);pointer-events:none}
+    body[data-theme="default"] .card.face-up, body[data-theme="light"] .card.face-up{background:linear-gradient(145deg,#ffffff,#f8fafc); border:1px solid rgba(203,213,225,.9); box-shadow:0 12px 20px rgba(77,95,122,.18), inset 0 0 0 1px rgba(255,255,255,.95);}
+    body[data-theme="default"] .card.face-up::before, body[data-theme="light"] .card.face-up::before{content:""; position:absolute; inset:0; background:linear-gradient(125deg, rgba(120,201,255,.18), transparent 22%, rgba(225,150,255,.16) 45%, transparent 60%, rgba(212,255,175,.16) 82%, transparent); pointer-events:none;}
+    body[data-theme="default"] .pip, body[data-theme="light"] .pip, body[data-theme="default"] .ace-pip, body[data-theme="light"] .ace-pip, body[data-theme="default"] .corner, body[data-theme="light"] .corner{filter:drop-shadow(0 0 4px rgba(125,211,252,.25));}
+    body[data-theme="dark"] .card.face-up{background:linear-gradient(145deg,#161618,#06070a); border:1px solid rgba(75,85,99,.95); box-shadow:0 12px 24px rgba(0,0,0,.46), inset 0 0 0 1px rgba(255,255,255,.04);}
+    body[data-theme="dark"] .card-back{background:linear-gradient(145deg,#15151a,#05070a)!important;}
+    body[data-theme="dark"] .card-back::before{border-color:rgba(239,68,68,.18); background:repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 4px, transparent 4px 10px), radial-gradient(circle at 50% 50%, rgba(239,68,68,.08), transparent 34%);}
+    body[data-theme="dark"] .card.face-up::before{content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(59,130,246,.06),transparent 35%,rgba(239,68,68,.08) 68%,transparent); pointer-events:none;}
     .side{display:flex; flex-direction:column; gap:16px; min-height:0; overflow:auto; padding-right:2px;}
     .panel{border-radius:22px; padding:20px; color:var(--text)}
     .panel h2{font-size:20px; margin:0 0 10px}.panel p{margin:.45rem 0; color:var(--muted); line-height:1.45}.panel strong{color:var(--text)}
@@ -129,100 +158,6 @@
     body[data-theme="kitty"] .primary{box-shadow:0 10px 30px rgba(244,114,182,.28)}
     body[data-theme="chernobyl"] .board-wrap{animation:radiation 3.2s ease-in-out infinite alternate}@keyframes radiation{to{filter:sepia(.08) saturate(1.2); box-shadow:0 0 38px rgba(182,255,57,.10), var(--shadow)}}
     body[data-theme="sponge"] .board-wrap{animation:bubbles 3s ease-in-out infinite alternate}@keyframes bubbles{to{filter:hue-rotate(8deg) brightness(1.05)}}
-
-    /* ===== Reference visual implementation: polished themes and bug fixes ===== */
-    .board-wrap{isolation:isolate;}
-    .board-wrap::before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 50% -20%,rgba(255,255,255,.16),transparent 32%),var(--felt);background-size:cover;background-position:center;pointer-events:none;transform:scale(1.01);}
-    .board-wrap::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.22));pointer-events:none;}
-    .board{position:relative;z-index:1;padding:clamp(36px,3vw,50px) clamp(12px,1.7vw,24px) 18px;}
-    .pile.empty:has(.card){border-color:transparent;background:transparent;}
-    .foundation-label{font-size:17px;line-height:1;top:-25px;opacity:.9;}
-    .label-suit{display:inline-grid;place-items:center;width:1.25em;height:1.25em;color:var(--muted);}
-    .foundation-icon{display:grid;place-items:center;width:100%;height:100%;font-size:clamp(24px,3vw,38px);opacity:.52;color:var(--muted);}
-    .suit-svg{width:1em;height:1em;display:block;fill:currentColor;stroke:currentColor;stroke-width:0;overflow:visible}
-    .corner-suit{font-size:clamp(12px,1.25vw,18px);line-height:1;display:grid;place-items:center}
-    .pip-suit{font-size:1em;display:grid;place-items:center}
-    .ace-suit{font-size:1em;display:grid;place-items:center}
-    .corner .rank{filter:drop-shadow(0 1px 0 rgba(255,255,255,.24))}
-    .card{border:1px solid rgba(255,255,255,.55);will-change:transform;}
-    .card.face-up{background:
-      radial-gradient(circle at 76% 12%,rgba(255,255,255,.28),transparent 22%),
-      linear-gradient(145deg,rgba(255,255,255,.96),rgba(242,242,235,.96));}
-    .face-art{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 8px 14px rgba(0,0,0,.10);}
-    .art-subtitle{font:800 7px/1 system-ui;letter-spacing:.08em;text-transform:uppercase;fill:currentColor;opacity:.8}
-    body[data-theme="minecraft"]::before{inset:0;background:linear-gradient(180deg,rgba(10,39,10,.15),rgba(0,0,0,.55)),url("assets/themes/minecraft-bg.jpg") center/cover no-repeat;}
-    body[data-theme="halloween"]::before{inset:0;background:linear-gradient(180deg,rgba(28,3,44,.20),rgba(0,0,0,.50)),url("assets/themes/halloween-bg.jpg") center/cover no-repeat;}
-    body[data-theme="kitty"]::before{inset:0;background:linear-gradient(180deg,rgba(255,235,246,.12),rgba(255,197,226,.22)),url("assets/themes/kitty-bg.jpg") center/cover no-repeat;}
-    body[data-theme="chernobyl"]::before{inset:0;background:linear-gradient(180deg,rgba(4,8,3,.22),rgba(0,0,0,.63)),url("assets/themes/chernobyl-bg.jpg") center/cover no-repeat;}
-    body[data-theme="sponge"]::before{inset:0;background:linear-gradient(180deg,rgba(0,116,168,.08),rgba(0,53,87,.36)),url("assets/themes/sponge-bg.jpg") center/cover no-repeat;}
-    body[data-theme="minecraft"]::after,body[data-theme="halloween"]::after,body[data-theme="kitty"]::after,body[data-theme="chernobyl"]::after,body[data-theme="sponge"]::after{opacity:.45;mix-blend-mode:normal;}
-    body[data-theme="minecraft"] .board-wrap::before{background:linear-gradient(180deg,rgba(42,74,25,.18),rgba(18,42,17,.56)),url("assets/themes/minecraft-bg.jpg") center/cover no-repeat;filter:saturate(1.08);}
-    body[data-theme="halloween"] .board-wrap::before{background:linear-gradient(180deg,rgba(55,15,80,.10),rgba(17,2,27,.58)),url("assets/themes/halloween-bg.jpg") center/cover no-repeat;filter:saturate(1.12) contrast(1.02);}
-    body[data-theme="kitty"] .board-wrap::before{background:linear-gradient(180deg,rgba(255,248,252,.18),rgba(255,213,233,.55)),url("assets/themes/kitty-bg.jpg") center/cover no-repeat;filter:saturate(1.12);}
-    body[data-theme="chernobyl"] .board-wrap::before{background:linear-gradient(180deg,rgba(11,17,8,.28),rgba(0,0,0,.60)),url("assets/themes/chernobyl-bg.jpg") center/cover no-repeat;filter:saturate(.95) contrast(1.05);}
-    body[data-theme="sponge"] .board-wrap::before{background:linear-gradient(180deg,rgba(13,161,200,.02),rgba(0,94,135,.38)),url("assets/themes/sponge-bg.jpg") center/cover no-repeat;filter:saturate(1.12);}
-    body[data-theme="minecraft"] .board-wrap::after{background:linear-gradient(180deg,rgba(14,34,12,.12),rgba(10,24,10,.32));}
-    body[data-theme="halloween"] .board-wrap::after{background:radial-gradient(circle at 22% 88%,rgba(255,112,23,.12),transparent 18%),linear-gradient(180deg,rgba(38,3,54,.06),rgba(9,0,15,.44));}
-    body[data-theme="kitty"] .board-wrap::after{background:radial-gradient(circle at 22% 16%,rgba(255,255,255,.28),transparent 22%),linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,196,225,.26));}
-    body[data-theme="chernobyl"] .board-wrap::after{background:radial-gradient(circle at 55% 18%,rgba(190,255,51,.09),transparent 24%),linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.52));}
-    body[data-theme="sponge"] .board-wrap::after{background:radial-gradient(circle at 70% 12%,rgba(255,255,255,.15),transparent 18%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,60,92,.25));}
-
-    body[data-theme="minecraft"] .pile.empty{border-color:rgba(244,243,174,.56);background:rgba(27,71,25,.25);color:rgba(246,239,165,.78)}
-    body[data-theme="halloween"] .pile.empty{border-color:rgba(216,180,254,.48);background:rgba(32,5,49,.25);color:rgba(238,209,255,.75)}
-    body[data-theme="kitty"] .pile.empty{border-color:rgba(236,72,153,.28);background:rgba(255,255,255,.36);color:rgba(126,52,96,.68)}
-    body[data-theme="chernobyl"] .pile.empty{border-color:rgba(210,222,157,.38);background:rgba(10,15,8,.38);color:rgba(210,222,157,.62)}
-    body[data-theme="sponge"] .pile.empty{border-color:rgba(236,254,255,.58);background:rgba(3,105,161,.16);color:rgba(224,252,255,.74)}
-
-    body[data-theme="minecraft"] .card.face-up{background:#f5edd4;border:3px solid #f6e7b1;border-radius:9px;box-shadow:0 7px 0 rgba(40,25,12,.25),0 16px 30px rgba(0,0,0,.28),inset 0 0 0 2px rgba(89,61,26,.18);}
-    body[data-theme="minecraft"] .card.face-up::before{background:linear-gradient(90deg,rgba(95,72,34,.13) 1px,transparent 1px),linear-gradient(rgba(95,72,34,.13) 1px,transparent 1px);background-size:9px 9px;opacity:.55;}
-    body[data-theme="minecraft"] .card-back{background:url("assets/themes/minecraft-back.svg") center/cover no-repeat!important;border-radius:9px;}
-    body[data-theme="minecraft"] .card-back::before,body[data-theme="minecraft"] .card-back::after{display:none;}
-    body[data-theme="minecraft"] .face-art{inset:18% 12%;border-radius:5px;background:#efe1b7;border:2px solid rgba(95,72,34,.18);image-rendering:pixelated;}
-    body[data-theme="minecraft"] .pip{filter:drop-shadow(1px 1px 0 rgba(0,0,0,.16));}
-
-    body[data-theme="halloween"] .card.face-up{background:linear-gradient(145deg,#2b102f,#17051f 78%);border:2px solid rgba(251,191,36,.32);box-shadow:0 13px 32px rgba(0,0,0,.42),inset 0 0 18px rgba(168,85,247,.10);}
-    body[data-theme="halloween"] .card-back{background:url("assets/themes/halloween-back.svg") center/cover no-repeat!important;}
-    body[data-theme="halloween"] .card-back::before,body[data-theme="halloween"] .card-back::after{display:none;}
-    body[data-theme="halloween"] .face-art{background:radial-gradient(circle at 50% 30%,rgba(249,115,22,.12),rgba(30,5,40,.92));border:1px solid rgba(251,191,36,.22);}
-    body[data-theme="halloween"] .pip{filter:drop-shadow(0 3px 5px rgba(0,0,0,.45));}
-
-    body[data-theme="kitty"] .card.face-up{background:linear-gradient(145deg,#fffafd,#fff0f7);border:2px solid rgba(244,114,182,.26);box-shadow:0 14px 26px rgba(190,24,93,.18),inset 0 0 0 1px rgba(255,255,255,.82);}
-    body[data-theme="kitty"] .card-back{background:url("assets/themes/kitty-back.svg") center/cover no-repeat!important;}
-    body[data-theme="kitty"] .card-back::before,body[data-theme="kitty"] .card-back::after{display:none;}
-    body[data-theme="kitty"] .face-art{background:linear-gradient(145deg,#fff,#ffe7f3);border:1px solid rgba(244,114,182,.35);}
-
-    body[data-theme="chernobyl"] .card.face-up{background:linear-gradient(145deg,#2a3024,#12180f 78%);border:2px solid rgba(218,217,181,.36);box-shadow:0 14px 32px rgba(0,0,0,.50),inset 0 0 24px rgba(182,255,57,.045);}
-    body[data-theme="chernobyl"] .card-back{background:url("assets/themes/chernobyl-back.svg") center/cover no-repeat!important;}
-    body[data-theme="chernobyl"] .card-back::before,body[data-theme="chernobyl"] .card-back::after{display:none;}
-    body[data-theme="chernobyl"] .face-art{background:radial-gradient(circle at 50% 30%,rgba(182,255,57,.08),rgba(9,13,8,.95));border:1px solid rgba(210,222,157,.22);}
-    body[data-theme="chernobyl"] .card.red{--suit-color:#e9785e}
-    body[data-theme="chernobyl"] .card.black{--suit-color:#cad6a1}
-
-    body[data-theme="sponge"] .card.face-up{background:linear-gradient(145deg,#fffef6,#fff8e8);border:3px solid rgba(255,255,255,.88);box-shadow:0 16px 28px rgba(1,49,77,.30),inset 0 0 0 1px rgba(6,95,136,.12);}
-    body[data-theme="sponge"] .card-back{background:url("assets/themes/sponge-back.svg") center/cover no-repeat!important;}
-    body[data-theme="sponge"] .card-back::before,body[data-theme="sponge"] .card-back::after{display:none;}
-    body[data-theme="sponge"] .face-art{background:linear-gradient(145deg,#f1feff,#fff8e2);border:1px solid rgba(6,95,136,.14);}
-    body[data-theme="sponge"] .card.face-up::before{opacity:.07;}
-    body[data-theme="sponge"] .pip{filter:drop-shadow(0 1px 0 rgba(255,255,255,.75));}
-
-
-    .pip-grid{inset:24% 20% 17% 20%;}
-    .pip{font-size:clamp(12px,1.42vw,20px);}
-    .card.rank-9 .pip,.card.rank-10 .pip{font-size:clamp(10px,1.22vw,17px);}
-    .card.rank-8 .pip{font-size:clamp(11px,1.30vw,18px);}
-    .ace-pip{font-size:clamp(42px,4.6vw,78px);}
-    body[data-theme="sponge"] .card-back{background:linear-gradient(135deg,#0ea5e9,#facc15),url("assets/themes/sponge-back.svg") center/cover no-repeat!important;}
-    body[data-theme="minecraft"] .card-back{background:linear-gradient(135deg,#7aaa4e,#8b5a2b),url("assets/themes/minecraft-back.svg") center/cover no-repeat!important;}
-    body[data-theme="halloween"] .card-back{background:linear-gradient(135deg,#34104b,#090011),url("assets/themes/halloween-back.svg") center/cover no-repeat!important;}
-    body[data-theme="chernobyl"] .card-back{background:linear-gradient(135deg,#2c341f,#050705),url("assets/themes/chernobyl-back.svg") center/cover no-repeat!important;}
-    body[data-theme="kitty"] .card-back{background:linear-gradient(135deg,#ffe2ef,#ffc3dc),url("assets/themes/kitty-back.svg") center/cover no-repeat!important;}
-
-    @media (max-width:700px){
-      .board{padding-top:32px;}
-      .foundation-label{top:-21px;font-size:13px}
-      .foundation-icon{font-size:22px}
-    }
-
     @media (max-width:1100px){html,body{overflow:auto}.app{height:auto; min-height:100svh; overflow:visible}.main{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;overflow:visible}.board-wrap{min-height:calc(var(--card-h) + var(--fan-y)*12 + 150px)}}
     @media (max-width:700px){:root{--card-w:clamp(42px,12.2vw,55px);--fan-y:20px;--gap:5px}.app{padding:8px}.topbar{border-radius:18px; min-height:auto}.logo{width:50px;height:50px;font-size:30px}.brand p{display:none}.stats{gap:6px}.stat{min-width:64px;padding:8px 9px;border-radius:13px}.stat b{font-size:16px}.stat span{font-size:10px;margin-top:5px}.toolbar{align-items:stretch;flex-direction:column;border-radius:18px}.buttons{display:grid;grid-template-columns:repeat(3,1fr)}button,select{padding:0 9px;font-size:13px}.theme-picker{margin-left:0;justify-content:space-between}.theme-picker select{max-width:none;flex:1}.board{padding:22px 6px 10px; overflow:visible; justify-content:center}.top-row{grid-template-columns:repeat(2,var(--card-w)) 1fr repeat(4,var(--card-w));}.side{grid-template-columns:1fr}.panel{padding:15px;border-radius:18px}.corner.top{top:5%;left:8%}.corner.bottom{right:8%;bottom:5%}.rank{font-size:14px}.suit{font-size:10px}.face-art{inset:25% 13%}.pip-grid{inset:24% 16%}.pip{font-size:15px}.ace-pip{font-size:36px}.modal-card{padding:20px}.warm{grid-column:span 2}}
     @media (max-width:380px){:root{--card-w:39px;--gap:4px;--fan-y:18px}.buttons{grid-template-columns:repeat(2,1fr)}.warm{grid-column:auto}.top-row,.tableau{width:100%; justify-content:center}}
@@ -327,7 +262,7 @@
     minecraft: {
       title:'Minecraft style', text:'Квадратный блочный стиль: красные биомы бьют темные шахты по классическому принципу чередования цветов.',
       rules:['Пиксельный король занимает пустую колонку.','Алмазы и сердца чередуются с углем и лианами.','Домики собирают добычу от A до K.'],
-      symbols:{S:'▰',H:'♥',D:'◆',C:'▣'}, names:{S:'шахты',H:'сердца',D:'алмазы',C:'блоки'}
+      symbols:{S:'♠',H:'♥',D:'♦',C:'♣'}, names:{S:'шахты',H:'сердца',D:'алмазы',C:'блоки'}
     },
     halloween: {
       title:'Halloween', text:'Темная жуткая тема: пауки, летучие тени, тыквы и кровавые сердца. По силе карт все остается как в Косынке.',
@@ -567,52 +502,7 @@
     hintTextEl.textContent = move.text;
     render();
   }
-  function nameCard(card){ return `${rankLabel(card.rank)} ${THEMES[state.theme].names?.[card.suit] || card.suit}`; }
-  function suitHTML(suit, cls='suit-icon'){
-    const icon = suitShape(state.theme, suit);
-    return `<span class="${cls}" aria-hidden="true">${icon}</span>`;
-  }
-  function foundationIcon(suit){ return `<span class="foundation-icon">${suitHTML(suit,'suit-icon')}</span>`; }
-  function suitShape(theme, suit){
-    const standard = {
-      S:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 6C17 20 8 29 8 41c0 10 8 17 18 13-2 6-5 10-9 14h30c-4-4-7-8-9-14 10 4 18-3 18-13C56 29 47 20 32 6z"/></svg>',
-      H:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 57C15 43 7 34 7 23 7 13 14 7 23 7c5 0 9 2 12 6 3-4 7-6 12-6 9 0 16 6 16 16 0 11-8 20-31 34z"/></svg>',
-      D:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 5l24 27-24 27L8 32z"/></svg>',
-      C:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M26 54c-3 5-6 8-10 12h32c-4-4-7-7-10-12 10 6 21-1 21-12 0-10-8-17-18-15 3-13-15-22-22-10-2 3-2 7-1 10C8 25 0 32 0 42c0 11 12 18 26 12z" transform="translate(2 -1) scale(.94)"/></svg>'
-    };
-    const halloween = {
-      S:'<svg class="suit-svg" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="33" r="10" fill="currentColor"/><circle cx="32" cy="19" r="7" fill="currentColor"/><path d="M22 32 8 22M21 37 7 43M42 32l14-10M43 37l14 6M25 24 14 9M39 24 50 9M27 45 18 58M37 45l9 13" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>',
-      H:standard.H,
-      D:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M33 7c-10 0-19 7-19 18 0 4 1 7 3 10-4 2-6 6-5 11 2 8 11 10 20 10s18-2 20-10c1-5-1-9-5-11 2-3 3-6 3-10C50 14 43 7 33 7z"/><path d="M24 21c6-6 14-6 20 0M22 35c9-7 20-6 25 2M30 10c-4 13-4 27 0 43M40 12c-3 13-3 26 0 39" fill="none" stroke="rgba(255,255,255,.33)" stroke-width="4" stroke-linecap="round"/></svg>',
-      C:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 24C21 9 8 11 2 19c10-1 15 4 20 11-9-3-16-1-21 5 13-1 21 4 31 16 10-12 18-17 31-16-5-6-12-8-21-5 5-7 10-12 20-11-6-8-19-10-30 5z"/></svg>'
-    };
-    const minecraft = {
-      S:'<svg class="suit-svg" viewBox="0 0 64 64" shape-rendering="crispEdges"><path d="M28 4h8v8h8v8h8v16h-8v8h-8v8h8v8H20v-8h8v-8h-8v-8h-8V20h8v-8h8z"/></svg>',
-      H:'<svg class="suit-svg" viewBox="0 0 64 64" shape-rendering="crispEdges"><path d="M8 12h16v8h8v-8h16v8h8v16h-8v8h-8v8h-8v8h-8v-8h-8v-8H8v-8H0V20h8z"/></svg>',
-      D:'<svg class="suit-svg" viewBox="0 0 64 64" shape-rendering="crispEdges"><path d="M32 4h8v8h8v8h8v8h8v8h-8v8h-8v8h-8v8h-8v-8h-8v-8h-8v-8H8v-8h8v-8h8v-8h8z"/></svg>',
-      C:'<svg class="suit-svg" viewBox="0 0 64 64" shape-rendering="crispEdges"><path d="M24 8h16v16h16v16H40v16H24V40H8V24h16z"/></svg>'
-    };
-    const kitty = {
-      S:standard.S,
-      H:standard.H,
-      D:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M10 25c8-12 17-10 22-1 5-9 14-11 22 1v20c-8 12-17 10-22 1-5 9-14 11-22-1zM30 20h4v31h-4z"/></svg>',
-      C:'<svg class="suit-svg" viewBox="0 0 64 64"><circle cx="21" cy="18" r="9"/><circle cx="43" cy="18" r="9"/><circle cx="15" cy="36" r="8"/><circle cx="49" cy="36" r="8"/><path d="M32 28c13 0 21 14 12 23-5 5-19 5-24 0-9-9-1-23 12-23z"/></svg>'
-    };
-    const chernobyl = {
-      S:'<svg class="suit-svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="8"/><path d="M32 5a27 27 0 0 1 13 4L36 26a10 10 0 0 0-8 0L19 9a27 27 0 0 1 13-4zM57 47a27 27 0 0 1-24 13l-1-19a10 10 0 0 0 8-5zM7 47a27 27 0 0 0 24 13l1-19a10 10 0 0 1-8-5z"/></svg>',
-      H:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 57C15 43 7 34 7 23 7 13 14 7 23 7c5 0 9 2 12 6 3-4 7-6 12-6 9 0 16 6 16 16 0 11-8 20-31 34z"/><path d="M8 33h14l5-10 9 24 7-14h13" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-      D:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 4l27 28-27 28L5 32z" fill="none" stroke="currentColor" stroke-width="8"/><circle cx="32" cy="32" r="9" fill="currentColor"/></svg>',
-      C:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M25 5h14v20h20v14H39v20H25V39H5V25h20z"/></svg>'
-    };
-    const sponge = {
-      S:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 8C18 20 10 29 10 40c0 11 9 17 18 13-2 5-5 9-9 12h26c-4-3-7-7-9-12 9 4 18-2 18-13C54 29 46 20 32 8z"/><circle cx="24" cy="33" r="3" fill="rgba(255,255,255,.35)"/><circle cx="38" cy="42" r="2.5" fill="rgba(255,255,255,.35)"/></svg>',
-      H:standard.H,
-      D:'<svg class="suit-svg" viewBox="0 0 64 64"><path d="M32 8c13 0 24 11 24 24S45 56 32 56 8 45 8 32 19 8 32 8z"/><path d="M22 20c8-6 20-6 26 6" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="5" stroke-linecap="round"/></svg>',
-      C:'<svg class="suit-svg" viewBox="0 0 64 64"><circle cx="24" cy="23" r="13"/><circle cx="43" cy="24" r="12"/><circle cx="34" cy="42" r="14"/><path d="M26 52c-2 5-5 9-9 13h30c-4-4-7-8-9-13z"/></svg>'
-    };
-    const table = theme==='halloween'?halloween:theme==='minecraft'?minecraft:theme==='kitty'?kitty:theme==='chernobyl'?chernobyl:theme==='sponge'?sponge:standard;
-    return table[suit] || standard[suit];
-  }
+  function nameCard(card){ return `${rankLabel(card.rank)} ${THEMES[state.theme].symbols[card.suit]}`; }
   function checkEnd(){
     const won = SUITS.every(s => state.foundations[s].length===13);
     if(won){
@@ -650,7 +540,7 @@
         ${renderPile('stock',0,'колода')}
         ${renderPile('waste',0,'сброс')}
         <div></div>
-        ${SUITS.map(s=>renderPile('foundation',s,'')).join('')}
+        ${SUITS.map(s=>renderPile('foundation',s,t.symbols[s])).join('')}
       </div>
       <div class="tableau">
         ${state.tableau.map((_,i)=>renderPile('tableau',i,'')).join('')}
@@ -669,7 +559,7 @@
     if(type==='foundation'){
       const pile=state.foundations[key]; const top=pile[pile.length-1];
       const hintClass = isHintTarget({type:'foundation', suit:key})?' hint-target':'';
-      return `<div class="pile empty${hintClass}" data-pile-type="foundation" data-suit="${key}" id="pile-foundation-${key}"><div class="pile-label foundation-label">${suitHTML(key,'label-suit')}</div>${top?renderCard(top,{source:'foundation', suit:key}):foundationIcon(key)}</div>`;
+      return `<div class="pile empty${hintClass}" data-pile-type="foundation" data-suit="${key}" id="pile-foundation-${key}"><div class="pile-label">${label}</div>${top?renderCard(top,{source:'foundation', suit:key}):THEMES[state.theme].symbols[key]}</div>`;
     }
     if(type==='tableau'){
       const pile=state.tableau[key]; const hintClass = isHintTarget({type:'tableau', pile:key})?' hint-target':'';
@@ -681,14 +571,17 @@
     const faceDown = meta.faceDown || !card.faceUp;
     const selectedClass = selected && sameSource(selected, meta) ? ' selected' : '';
     const hintClass = hintMark && sameSource(hintMark.from, meta) ? ' hint-source' : '';
-    const cls = `card ${faceDown?'card-back':'face-up'} ${cardColor(card)} suit-${card.suit} rank-${card.rank}${selectedClass}${hintClass}`;
-    const data = source==='stock' ? '' : `data-source="${source}" ${meta.pile!==undefined?`data-pile="${meta.pile}"`:''} ${meta.index!==undefined?`data-index="${meta.index}"`:''} ${meta.suit?`data-suit="${meta.suit}"`:''}`;
+    const backPath = themeBackPath();
+    const photoFace = !faceDown && usesPhotoFace(card);
+    const extraClass = `${backPath ? ' theme-shot' : ''}${photoFace ? ' photo-card' : ''}`;
+    const cls = `card ${faceDown?'card-back':'face-up'} ${cardColor(card)}${selectedClass}${hintClass}${extraClass}`;
+    const data = source==='stock' ? `data-theme-shot="${state.theme}"` : `data-source="${source}" ${meta.pile!==undefined?`data-pile="${meta.pile}"`:''} ${meta.index!==undefined?`data-index="${meta.index}"`:''} ${meta.suit?`data-suit="${meta.suit}"`:''} data-theme-shot="${state.theme}"`;
     const style = `style="--offset:${meta.offset||0}"`;
-    if(faceDown) return `<div class="${cls}" ${data} ${style} aria-label="Закрытая карта"></div>`;
-    const sym = suitHTML(card.suit, 'corner-suit');
+    if(faceDown) return `<div class="${cls}" ${data} ${style} aria-label="Закрытая карта">${backPath?`<div class="photo-face" style="background-image:url('${backPath}')"></div>`:''}</div>`;
+    const sym = THEMES[state.theme].symbols[card.suit];
     return `<div class="${cls}" ${data} ${style} aria-label="${nameCard(card)}">
-      <div class="corner top"><span class="rank">${rankLabel(card.rank)}</span>${sym}</div>
-      <div class="corner bottom"><span class="rank">${rankLabel(card.rank)}</span>${sym}</div>
+      <div class="corner top"><span class="rank">${rankLabel(card.rank)}</span><span class="suit">${sym}</span></div>
+      <div class="corner bottom"><span class="rank">${rankLabel(card.rank)}</span><span class="suit">${sym}</span></div>
       ${centerHTML(card)}
     </div>`;
   }
@@ -708,129 +601,76 @@
     if(target.type==='tableau') return target.pile===hintMark.to.pile;
     return false;
   }
+  function themeBackPath(){
+    const map={minecraft:'assets/refcards/mc_back.png',chernobyl:'assets/refcards/ch_back.png',halloween:'assets/refcards/hw_back.png',sponge:'assets/refcards/sp_back.png'};
+    return map[state.theme]||null;
+  }
+  function themeFacePath(card){
+    const t=state.theme;
+    if(t==='minecraft'){
+      if(card.rank===13) return 'assets/refcards/mc_k.png';
+      if(card.rank===12) return 'assets/faces/mc_q.png';
+      if(card.rank===11) return 'assets/refcards/mc_j.png';
+    }
+    if(t==='chernobyl'){
+      if(card.rank===13) return 'assets/refcards/ch_k.png';
+      if(card.rank===12&&card.suit==='D') return 'assets/refcards/ch_qd.png';
+      if(card.rank===12) return 'assets/refcards/ch_qh.png';
+      if(card.rank===11) return 'assets/refcards/ch_j.png';
+    }
+    if(t==='halloween'){
+      if(card.rank===13) return 'assets/refcards/hw_k.png';
+      if(card.rank===12) return 'assets/refcards/hw_k.png';
+      if(card.rank===11) return 'assets/refcards/hw_j.png';
+    }
+    if(t==='sponge'){
+      if(card.rank===13) return 'assets/refcards/sp_k.png';
+      if(card.rank===12&&card.suit==='D') return 'assets/refcards/sp_qd.png';
+      if(card.rank===12) return 'assets/refcards/sp_qh.png';
+      if(card.rank===11) return 'assets/refcards/sp_j.png';
+    }
+    return null;
+  }
+  function usesPhotoFace(card){ return !!themeFacePath(card); }
   function centerHTML(card){
-    if(card.rank===1) return `<div class="ace-pip">${suitHTML(card.suit,'ace-suit')}</div>`;
+    const photo = themeFacePath(card);
+    if(photo) return `<div class="photo-face" style="background-image:url('${photo}')"></div>`;
+    if(card.rank===1) return `<div class="ace-pip">${THEMES[state.theme].symbols[card.suit]}</div>`;
     if(card.rank>10) return `<div class="face-art">${artSVG(card)}</div>`;
     return pipGrid(card);
   }
   function pipGrid(card){
+    const sym = THEMES[state.theme].symbols[card.suit];
     const patterns = {
       2:[[2,1],[2,4]],3:[[2,1],[2,2],[2,4]],4:[[1,1],[3,1],[1,4],[3,4]],5:[[1,1],[3,1],[2,2],[1,4],[3,4]],
       6:[[1,1],[3,1],[1,2],[3,2],[1,4],[3,4]],7:[[1,1],[3,1],[2,2],[1,3],[3,3],[1,4],[3,4]],8:[[1,1],[3,1],[1,2],[3,2],[1,3],[3,3],[1,4],[3,4]],
       9:[[1,1],[3,1],[1,2],[3,2],[2,2],[1,3],[3,3],[1,4],[3,4]],10:[[1,1],[3,1],[2,1],[1,2],[3,2],[1,3],[3,3],[2,4],[1,4],[3,4]]
     };
-    return `<div class="pip-grid">${patterns[card.rank].map(([c,r])=>`<span class="pip" style="grid-column:${c};grid-row:${r}">${suitHTML(card.suit,'pip-suit')}</span>`).join('')}</div>`;
+    return `<div class="pip-grid">${patterns[card.rank].map(([c,r])=>`<span class="pip" style="grid-column:${c};grid-row:${r}">${sym}</span>`).join('')}</div>`;
   }
   function artSVG(card){
     const theme = state.theme; const rank=card.rank; const color = cardColor(card)==='red' ? 'var(--card-red)' : 'var(--card-black)';
-    if(theme==='minecraft') return pixelArt(rank, color);
+    if(theme==='minecraft') return themePhotoArt('minecraft', rank);
+    if(theme==='kitty') return themePhotoArt('kitty', rank);
+    if(theme==='chernobyl') return themePhotoArt('chernobyl', rank);
+    if(theme==='sponge') return themePhotoArt('sponge', rank);
     if(theme==='halloween') return halloweenArt(rank, color);
-    if(theme==='kitty') return kittyArt(rank, color);
-    if(theme==='chernobyl') return chernobylArt(rank, color);
-    if(theme==='sponge') return spongeArt(rank, color);
-    if(theme==='dark') return classicArt(rank, color, true);
+    if(theme==='dark') return darkClassicArt(rank, color);
     return classicArt(rank, color, false);
   }
-  function classicArt(rank,color,dark){ const label = rank===13?'KING':rank===12?'QUEEN':'JACK'; const bg=dark?'#0f172a':'#f8fafc'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="${bg}" opacity=".55"/><path d="M24 88h72l-8-48-18 18-10-26-10 26-18-18z" fill="currentColor" opacity=".88"/><circle cx="60" cy="36" r="15" fill="currentColor" opacity=".65"/><text x="60" y="106" text-anchor="middle" class="art-title">${label}</text></svg>`; }
-  function pixelArt(rank,color){ const label=rank===13?'BLOCK KING':rank===12?'ARCHER':'MINER'; const head=rank===13?'#8b5cf6':rank===12?'#fb923c':'#64748b'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}" shape-rendering="crispEdges"><rect width="120" height="120" fill="#efe8cf"/><rect x="30" y="18" width="60" height="18" fill="#facc15"/><rect x="42" y="36" width="36" height="30" fill="${head}"/><rect x="48" y="46" width="8" height="8" fill="#111"/><rect x="65" y="46" width="8" height="8" fill="#111"/><rect x="36" y="66" width="48" height="30" fill="#2f855a"/><rect x="24" y="72" width="18" height="18" fill="#8b5a2b"/><rect x="78" y="72" width="18" height="18" fill="#8b5a2b"/><rect x="22" y="26" width="76" height="5" fill="#000" opacity=".15"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
-  function halloweenArt(rank,color){ const label=rank===13?'PUMPKIN':rank===12?'WITCH':'SKELETON'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="#1d0728"/><circle cx="60" cy="45" r="24" fill="${rank===13?'#f97316':rank===12?'#a855f7':'#e5e7eb'}"/><path d="M36 34h48l-17-20H53z" fill="#111827" opacity="${rank===12?1:.35}"/><path d="M48 46l9 7-9 7M72 46l-9 7 9 7" stroke="#111" stroke-width="4" fill="none"/><path d="M38 82c16 18 45 18 60 0" stroke="currentColor" stroke-width="10" stroke-linecap="round"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
-  function kittyArt(rank,color){ const label=rank===13?'CAT KING':rank===12?'CAT QUEEN':'BOW PAL'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="18" fill="#fff0f7"/><path d="M36 49L28 24l24 12M84 49l8-25-24 12" fill="#fff" stroke="#7c335f" stroke-width="3"/><circle cx="60" cy="59" r="30" fill="#fff" stroke="#7c335f" stroke-width="3"/><circle cx="50" cy="58" r="3" fill="#111"/><circle cx="70" cy="58" r="3" fill="#111"/><path d="M58 67h4M48 75c8 5 16 5 24 0" stroke="#7c335f" stroke-width="3" fill="none"/><path d="M75 30l12-9 10 12-12 9zM87 33l13-8 4 15-16 2z" fill="#fb8ac0"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
-  function chernobylArt(rank,color){ const label=rank===13?'STALKER':rank===12?'SCIENTIST':'MUTANT'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="#11180f"/><circle cx="60" cy="44" r="25" fill="#2f3b2a" stroke="#b6ff39" stroke-width="3" opacity=".9"/><circle cx="50" cy="42" r="8" fill="#b6ff39" opacity=".5"/><circle cx="70" cy="42" r="8" fill="#b6ff39" opacity=".5"/><rect x="54" y="55" width="12" height="20" rx="5" fill="#1f2937"/><path d="M30 94l14-32h32l14 32" fill="#4b5563"/><path d="M60 17v18M42 27l14 11M78 27L64 38" stroke="#facc15" stroke-width="4"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
-  function spongeArt(rank,color){ const label=rank===13?'SEA KING':rank===12?'STAR PAL':'SQUID ART'; const body=rank===12?'#fda4af':rank===11?'#93c5fd':'#facc15'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="18" fill="#dffbff"/><circle cx="28" cy="26" r="7" fill="#67e8f9" opacity=".55"/><circle cx="93" cy="34" r="10" fill="#67e8f9" opacity=".45"/><rect x="38" y="28" width="44" height="50" rx="12" fill="${body}" stroke="#07364d" stroke-width="3"/><circle cx="51" cy="50" r="5" fill="#fff"/><circle cx="69" cy="50" r="5" fill="#fff"/><circle cx="51" cy="50" r="2" fill="#07364d"/><circle cx="69" cy="50" r="2" fill="#07364d"/><path d="M50 66c7 5 14 5 20 0" stroke="#07364d" stroke-width="3" fill="none"/><path d="M41 23h38l-10-12-9 12-9-12z" fill="#fde047" opacity="${rank===13?1:.25}"/><text x="60" y="110" text-anchor="middle" class="art-title">${label}</text></svg>`; }
-
-
-  /* Override art with more detailed reference-based SVG cards */
-  function artSVG(card){
-    const theme = state.theme;
-    if(theme==='minecraft') return pixelArt(card);
-    if(theme==='halloween') return halloweenArt(card);
-    if(theme==='kitty') return kittyArt(card);
-    if(theme==='chernobyl') return chernobylArt(card);
-    if(theme==='sponge') return spongeArt(card);
-    if(theme==='dark') return classicArt(card, true);
-    return classicArt(card, false);
+  function themePhotoArt(theme, rank){
+    const map={
+      minecraft:{13:['assets/faces/mc_q.png','hero'],12:['assets/faces/mc_k.png','mob'],11:['assets/faces/mc_j.png','tool']},
+      kitty:{13:['assets/faces/kitty_k.png','hello kitty'],12:['assets/faces/kitty_q.png','kitty bear'],11:['assets/faces/kitty_j.png','kitty moon']},
+      chernobyl:{13:['assets/faces/ch_q.png','stalker'],12:['assets/faces/ch_k.png','artifact'],11:['assets/faces/ch_j.png','survivor']},
+      sponge:{13:['assets/faces/sp_k.png','sandy'],12:['assets/faces/sp_q.png','squidward'],11:['assets/faces/sp_j.png','patrick']}
+    };
+    const info=map[theme][rank] || map[theme][11];
+    return `<div class="art-photo" style="background-image:url('${info[0]}')" data-label="${info[1]}"></div>`;
   }
-  function artLabel(card, names){
-    if(card.rank===13) return names[0];
-    if(card.rank===12) return names[1];
-    return names[2];
-  }
-  function classicArt(card,dark){
-    const label = artLabel(card,['KING','QUEEN','JACK']);
-    const color = cardColor(card)==='red' ? 'var(--card-red)' : 'var(--card-black)';
-    const bg = dark ? '#0f172a' : '#f8fafc';
-    return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="16" fill="${bg}" opacity=".72"/><path d="M21 91h78l-8-48-19 19-12-33-12 33-19-19z" fill="currentColor" opacity=".88"/><circle cx="60" cy="35" r="15" fill="currentColor" opacity=".62"/><path d="M34 20h52" stroke="currentColor" stroke-width="5" opacity=".25"/><text x="60" y="108" text-anchor="middle" class="art-title">${label}</text></svg>`;
-  }
-  function pixelArt(card){
-    const label = card.rank===13 ? 'BLOCK KING' : card.rank===12 ? (card.suit==='H'?'PIG QUEEN':'WITCH QUEEN') : (card.suit==='S'?'CREEPER JACK':'MINER JACK');
-    const isKing=card.rank===13, isQueen=card.rank===12;
-    const skin = isKing ? '#a8764a' : isQueen ? (card.suit==='H'?'#ef9aa7':'#5b6f49') : (card.suit==='S'?'#4caf50':'#8a6842');
-    const shirt = isKing ? '#25a3bb' : isQueen ? (card.suit==='H'?'#efb0b9':'#563075') : (card.suit==='S'?'#397d3b':'#b7793e');
-    return `<svg class="art-svg" viewBox="0 0 120 120" shape-rendering="crispEdges">
-      <rect width="120" height="120" fill="#f1e6c8"/>
-      <rect x="8" y="8" width="104" height="104" fill="none" stroke="#6d5532" stroke-width="3" opacity=".3"/>
-      <rect x="22" y="18" width="76" height="10" fill="#7b5a2e" opacity=".35"/>
-      ${isKing?'<rect x="43" y="16" width="10" height="12" fill="#facc15"/><rect x="58" y="10" width="10" height="18" fill="#facc15"/><rect x="73" y="16" width="10" height="12" fill="#facc15"/><rect x="39" y="26" width="48" height="8" fill="#eab308"/>':''}
-      <rect x="42" y="32" width="38" height="34" fill="${skin}"/>
-      <rect x="50" y="44" width="7" height="7" fill="#0d160f"/><rect x="66" y="44" width="7" height="7" fill="#0d160f"/>
-      <rect x="55" y="57" width="14" height="5" fill="#452d1b" opacity="${isKing?.65:.35}"/>
-      <rect x="35" y="66" width="52" height="30" fill="${shirt}"/>
-      <rect x="24" y="70" width="14" height="22" fill="${skin}"/><rect x="84" y="70" width="14" height="22" fill="${skin}"/>
-      ${card.rank===11 && card.suit==='S'?'<rect x="38" y="33" width="44" height="44" fill="#4caf50"/><rect x="47" y="46" width="10" height="10" fill="#111"/><rect x="65" y="46" width="10" height="10" fill="#111"/><rect x="55" y="61" width="12" height="18" fill="#111"/><rect x="45" y="72" width="10" height="10" fill="#111"/><rect x="67" y="72" width="10" height="10" fill="#111"/>':''}
-      ${card.rank===12 && card.suit==='H'?'<rect x="40" y="36" width="46" height="38" fill="#f4a3ad"/><rect x="35" y="31" width="12" height="12" fill="#f4a3ad"/><rect x="78" y="31" width="12" height="12" fill="#f4a3ad"/><rect x="51" y="50" width="7" height="7" fill="#111"/><rect x="69" y="50" width="7" height="7" fill="#111"/><rect x="59" y="60" width="9" height="5" fill="#9a3412"/>':''}
-      <text x="60" y="111" text-anchor="middle" class="art-title" fill="#1f2937">${label}</text>
-    </svg>`;
-  }
-  function halloweenArt(card){
-    const label = card.rank===13 ? 'SKELETON KING' : card.rank===12 ? 'WITCH QUEEN' : 'PUMPKIN JACK';
-    const main = card.rank===13 ? '#e5e7eb' : card.rank===12 ? '#a855f7' : '#f97316';
-    return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${cardColor(card)==='red'?'var(--card-red)':'var(--card-black)'}">
-      <rect width="120" height="120" rx="16" fill="#17051f"/><circle cx="92" cy="24" r="14" fill="#fcd34d" opacity=".32"/><path d="M0 92c22-10 43-8 62 1s40 11 58-1v28H0z" fill="#06030a" opacity=".45"/>
-      ${card.rank===13?'<circle cx="60" cy="43" r="24" fill="#e5e7eb"/><rect x="44" y="66" width="32" height="26" rx="6" fill="#cbd5e1"/><circle cx="51" cy="40" r="7" fill="#111"/><circle cx="69" cy="40" r="7" fill="#111"/><path d="M53 55h14M38 81h44M38 92h44" stroke="#111" stroke-width="4"/><path d="M42 17l18-12 18 12v8H42z" fill="#eab308"/>':''}
-      ${card.rank===12?'<path d="M28 42h64L64 10H52z" fill="#0f172a"/><circle cx="60" cy="50" r="24" fill="#c084fc"/><path d="M43 54c9 8 24 8 34 0" stroke="#111" stroke-width="4" fill="none"/><circle cx="51" cy="45" r="4" fill="#111"/><circle cx="69" cy="45" r="4" fill="#111"/><path d="M38 77l44 0 10 22H28z" fill="#4c1d95"/>':''}
-      ${card.rank===11?'<ellipse cx="60" cy="51" rx="30" ry="27" fill="#f97316"/><ellipse cx="45" cy="51" rx="14" ry="25" fill="#fb923c" opacity=".75"/><ellipse cx="74" cy="51" rx="14" ry="25" fill="#c2410c" opacity=".65"/><path d="M47 46l-12 10h24zM73 46l-12 10h24zM39 68h43l-9 10-8-8-8 9-8-9-8 8z" fill="#111827"/><path d="M58 23c9-9 18-13 29-11-4 10-12 18-25 22z" fill="#65a30d"/>':''}
-      <text x="60" y="111" text-anchor="middle" class="art-title">${label}</text>
-    </svg>`;
-  }
-  function kittyArt(card){
-    const label = card.rank===13 ? 'KITTY KING' : card.rank===12 ? 'KITTY QUEEN' : 'BOW JACK';
-    return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${cardColor(card)==='red'?'var(--card-red)':'var(--card-black)'}">
-      <rect width="120" height="120" rx="18" fill="#fff0f7"/><rect x="8" y="8" width="104" height="104" rx="14" fill="none" stroke="#f9a8d4" stroke-width="2"/>
-      <path d="M38 48L29 23l24 12M82 48l9-25-24 12" fill="#fff" stroke="#7c335f" stroke-width="3"/>
-      <circle cx="60" cy="60" r="30" fill="#fff" stroke="#7c335f" stroke-width="3"/>
-      ${card.rank===13?'<path d="M44 29l9-14 7 12 7-12 9 14z" fill="#facc15" stroke="#7c335f" stroke-width="2"/>':''}
-      ${card.rank===12?'<path d="M76 26l13-10 10 13-14 10zM89 28l16-10 5 18-20 4z" fill="#fb8ac0" stroke="#7c335f" stroke-width="2"/>':'<path d="M78 34l11-8 8 11-11 8zM89 35l15-8 4 16-18 4z" fill="#fb8ac0" stroke="#7c335f" stroke-width="2"/>'}
-      <circle cx="50" cy="59" r="3.5" fill="#111"/><circle cx="70" cy="59" r="3.5" fill="#111"/>
-      <path d="M58 68h4M48 77c8 5 16 5 24 0M38 67H18M42 73H22M82 67h20M78 73h22" stroke="#7c335f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <text x="60" y="111" text-anchor="middle" class="art-title">${label}</text>
-    </svg>`;
-  }
-  function chernobylArt(card){
-    const label = card.rank===13 ? 'STALKER' : card.rank===12 ? 'SCIENTIST' : 'MUTANT';
-    const coat = card.rank===13 ? '#71634e' : card.rank===12 ? '#b9c2aa' : '#4d5c3d';
-    return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${cardColor(card)==='red'?'#e9785e':'#cad6a1'}">
-      <rect width="120" height="120" rx="16" fill="#10160d"/><path d="M0 93c31-13 62-13 120 0v27H0z" fill="#080c06"/><path d="M92 12v89M98 12v89" stroke="#3b4330" stroke-width="3" opacity=".55"/><path d="M88 18h14M87 38h16M87 59h16M87 79h16" stroke="#3b4330" stroke-width="3" opacity=".55"/>
-      ${card.rank===13?'<path d="M33 55c3-29 51-29 54 0l-12-9c-10-8-20-8-30 0z" fill="#2d281f"/><circle cx="60" cy="49" r="21" fill="#5b5140"/><path d="M37 70h46l12 32H25z" fill="#71634e"/><circle cx="52" cy="48" r="5" fill="#cad6a1"/><circle cx="68" cy="48" r="5" fill="#cad6a1"/><path d="M45 63c10 5 20 5 30 0" stroke="#111" stroke-width="4"/>':''}
-      ${card.rank===12?'<circle cx="60" cy="45" r="23" fill="#293124" stroke="#cad6a1" stroke-width="3"/><circle cx="51" cy="43" r="8" fill="#b6ff39" opacity=".55"/><circle cx="69" cy="43" r="8" fill="#b6ff39" opacity=".55"/><rect x="55" y="56" width="10" height="20" rx="4" fill="#111827"/><path d="M33 76h54l11 28H22z" fill="#b9c2aa"/><path d="M91 81l13 9-8 8-13-10z" fill="#111827"/>':''}
-      ${card.rank===11?'<path d="M42 30c12-15 41-9 39 16-1 15-10 24-21 24S39 60 38 47c-1-7 1-12 4-17z" fill="#4d5c3d"/><circle cx="52" cy="47" r="5" fill="#b6ff39"/><circle cx="69" cy="47" r="5" fill="#b6ff39"/><path d="M34 78h52l13 26H21z" fill="#38452d"/><path d="M35 33c15 8 33 8 51 0" stroke="#cad6a1" stroke-width="3" opacity=".5"/>':''}
-      <path d="M20 18l9 17H11zM20 24v5M20 32h.1" stroke="#facc15" stroke-width="3" fill="none" opacity=".75"/>
-      <text x="60" y="111" text-anchor="middle" class="art-title">${label}</text>
-    </svg>`;
-  }
-  function spongeArt(card){
-    const red = cardColor(card)==='red';
-    const label = card.rank===13 ? (card.suit==='C'?'SQUIDWARD':'SEA KING') : card.rank===12 ? (card.suit==='D'?'MR. KRABS':'SANDY') : (card.suit==='H'?'PATRICK':'SPONGEBOB');
-    return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${red?'#ef4663':'#09566e'}">
-      <rect width="120" height="120" rx="17" fill="#effcff"/><rect x="8" y="8" width="104" height="104" rx="12" fill="none" stroke="#9bdcec" stroke-width="2"/><circle cx="25" cy="25" r="7" fill="#67e8f9" opacity=".45"/><circle cx="96" cy="32" r="9" fill="#67e8f9" opacity=".38"/>
-      ${card.rank===13?'<path d="M45 50c0-26 30-26 30 0 0 21-5 32-15 32S45 71 45 50z" fill="#9bd3c4" stroke="#09566e" stroke-width="3"/><rect x="39" y="76" width="42" height="18" rx="4" fill="#8b5e34"/><path d="M43 22h34l-9-12-8 12-8-12z" fill="#facc15" stroke="#7b5b00" stroke-width="2"/><circle cx="53" cy="48" r="6" fill="#fff"/><circle cx="67" cy="48" r="6" fill="#fff"/><circle cx="53" cy="48" r="2.5" fill="#09566e"/><circle cx="67" cy="48" r="2.5" fill="#09566e"/><path d="M51 63c6 4 12 4 18 0" stroke="#09566e" stroke-width="3" fill="none"/>':''}
-      ${card.rank===12 && card.suit==='D'?'<path d="M36 54c-15-6-17-24-4-30 8 6 9 15 3 25zM84 54c15-6 17-24 4-30-8 6-9 15-3 25z" fill="#ef4444" stroke="#7f1d1d" stroke-width="3"/><rect x="38" y="38" width="44" height="46" rx="13" fill="#ef4444" stroke="#7f1d1d" stroke-width="3"/><circle cx="51" cy="54" r="5" fill="#fff"/><circle cx="70" cy="54" r="5" fill="#fff"/><circle cx="51" cy="54" r="2" fill="#111"/><circle cx="70" cy="54" r="2" fill="#111"/><path d="M46 72h28" stroke="#111" stroke-width="4"/>':''}
-      ${card.rank===12 && card.suit!=='D'?'<circle cx="60" cy="47" r="27" fill="#f6b56e" stroke="#8a4b1d" stroke-width="3"/><circle cx="49" cy="43" r="7" fill="#fff"/><circle cx="70" cy="43" r="7" fill="#fff"/><circle cx="49" cy="43" r="3" fill="#09566e"/><circle cx="70" cy="43" r="3" fill="#09566e"/><path d="M48 64c8 7 20 7 28 0" stroke="#8a4b1d" stroke-width="4" fill="none"/><circle cx="60" cy="24" r="15" fill="none" stroke="#67e8f9" stroke-width="5"/><rect x="35" y="76" width="50" height="18" rx="5" fill="#fff"/>':''}
-      ${card.rank===11 && card.suit==='H'?'<path d="M60 25l28 58H32z" fill="#f7a8b8" stroke="#9f1239" stroke-width="3"/><circle cx="52" cy="55" r="6" fill="#fff"/><circle cx="69" cy="55" r="6" fill="#fff"/><circle cx="52" cy="55" r="2" fill="#111"/><circle cx="69" cy="55" r="2" fill="#111"/><path d="M50 72c9 7 18 7 27 0" stroke="#111" stroke-width="4" fill="none"/>':''}
-      ${card.rank===11 && card.suit!=='H'?'<rect x="38" y="30" width="44" height="46" rx="6" fill="#facc15" stroke="#9a6b00" stroke-width="3"/><circle cx="52" cy="48" r="8" fill="#fff"/><circle cx="68" cy="48" r="8" fill="#fff"/><circle cx="52" cy="48" r="3" fill="#09566e"/><circle cx="68" cy="48" r="3" fill="#09566e"/><path d="M47 63c8 8 18 8 26 0" stroke="#7b5b00" stroke-width="4" fill="none"/><rect x="43" y="76" width="34" height="14" fill="#fff"/><rect x="43" y="90" width="34" height="8" fill="#8b5e34"/>':''}
-      <text x="60" y="110" text-anchor="middle" class="art-title">${label}</text>
-    </svg>`;
-  }
-
+  function classicArt(rank,color,dark){ const label = rank===13?'K':rank===12?'Q':'J'; const bg=dark?'#0f172a':'#ffffff'; const accent=dark?'rgba(239,68,68,.18)':'rgba(148,163,184,.18)'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="${bg}"/><rect x="10" y="10" width="100" height="100" rx="12" fill="none" stroke="${accent}"/><path d="M24 88h72l-8-48-18 18-10-26-10 26-18-18z" fill="currentColor" opacity=".88"/><circle cx="60" cy="36" r="15" fill="currentColor" opacity=".65"/><text x="60" y="105" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function darkClassicArt(rank,color){ const label = rank===13?'K':rank===12?'Q':'J'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="#0b0e13"/><path d="M23 92l14-50 23 18 23-18 14 50" fill="currentColor" opacity=".78"/><circle cx="60" cy="35" r="13" fill="currentColor" opacity=".45"/><path d="M35 24c15-9 35-9 50 0" stroke="currentColor" stroke-width="3" opacity=".35"/><text x="60" y="106" text-anchor="middle" class="art-title">${label}</text></svg>`; }
+  function halloweenArt(rank,color){ const label=rank===13?'PUMPKIN':rank===12?'WITCH':'SKELETON'; return `<svg class="art-svg" viewBox="0 0 120 120" style="color:${color}"><rect width="120" height="120" rx="14" fill="#190321"/><circle cx="60" cy="28" r="18" fill="#ffd76a" opacity=".18"/><path d="M28 92h64c-8-18-19-26-32-26S36 74 28 92z" fill="#09020f" opacity=".8"/><ellipse cx="60" cy="58" rx="24" ry="22" fill="${rank===13?'#f97316':rank===12?'#8b5cf6':'#e5e7eb'}"/><path d="M50 54l6 6-6 6M70 54l-6 6 6 6" stroke="#111" stroke-width="4" fill="none"/><path d="M44 75c11 10 21 10 32 0" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><path d="M35 34c-2-16 8-29 26-29 3-7 9-11 17-10-3 4-4 8-3 13 11 4 18 14 17 26" stroke="#201a25" stroke-width="5" fill="none" opacity=".9"/><text x="60" y="108" text-anchor="middle" class="art-title">${label}</text></svg>`; }
   function bindBoardEvents(){
     board.querySelectorAll('.card').forEach(card=>{
       if(card.dataset.source!=='stock') card.addEventListener('pointerdown', pointerDown, {passive:false});

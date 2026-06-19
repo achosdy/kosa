@@ -1,4 +1,4 @@
-const CACHE_NAME = 'klondike-pwa-reference-visuals-v3';
+const CACHE_NAME = 'klondike-pwa-reference-visuals-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -7,16 +7,23 @@ const ASSETS = [
   './assets/icons/apple-touch-icon.png',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
-  './assets/themes/sponge-bg.jpg',
-  './assets/themes/minecraft-bg.jpg',
-  './assets/themes/halloween-bg.jpg',
-  './assets/themes/chernobyl-bg.jpg',
-  './assets/themes/kitty-bg.jpg',
+  './assets/themes/default-ref.jpg',
+  './assets/themes/light-ref.jpg',
+  './assets/themes/dark-ref.jpg',
+  './assets/themes/minecraft-ref.jpg',
+  './assets/themes/halloween-ref.png',
+  './assets/themes/chernobyl-ref.jpg',
+  './assets/themes/kitty-ref.jpg',
+  './assets/themes/sponge-ref.jpg',
   './assets/themes/sponge-back.svg',
   './assets/themes/minecraft-back.svg',
   './assets/themes/halloween-back.svg',
   './assets/themes/chernobyl-back.svg',
   './assets/themes/kitty-back.svg',
+  './assets/faces/mc_j.png','./assets/faces/mc_q.png','./assets/faces/mc_k.png',
+  './assets/faces/sp_j.png','./assets/faces/sp_q.png','./assets/faces/sp_k.png',
+  './assets/faces/kitty_j.png','./assets/faces/kitty_q.png','./assets/faces/kitty_k.png',
+  './assets/faces/ch_j.png','./assets/faces/ch_q.png','./assets/faces/ch_k.png'
 ];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
