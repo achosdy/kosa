@@ -158,6 +158,20 @@
     body[data-theme="kitty"] .primary{box-shadow:0 10px 30px rgba(244,114,182,.28)}
     body[data-theme="chernobyl"] .board-wrap{animation:radiation 3.2s ease-in-out infinite alternate}@keyframes radiation{to{filter:sepia(.08) saturate(1.2); box-shadow:0 0 38px rgba(182,255,57,.10), var(--shadow)}}
     body[data-theme="sponge"] .board-wrap{animation:bubbles 3s ease-in-out infinite alternate}@keyframes bubbles{to{filter:hue-rotate(8deg) brightness(1.05)}}
+
+    /* Exact screenshot-grounded theme backgrounds */
+    body[data-theme="minecraft"]::before{background:url("assets/themes/minecraft-exact.png") center/cover no-repeat !important;}
+    body[data-theme="minecraft"]::after{display:none !important;}
+    body[data-theme="minecraft"] .board-wrap{background:transparent !important; border:none !important; box-shadow:none !important;}
+    body[data-theme="chernobyl"]::before{background:url("assets/themes/chernobyl-exact.png") center/cover no-repeat !important;}
+    body[data-theme="chernobyl"]::after{display:none !important;}
+    body[data-theme="chernobyl"] .board-wrap{background:transparent !important; border:none !important; box-shadow:none !important;}
+    body[data-theme="halloween"]::before{background:url("assets/themes/halloween-exact.png") center/cover no-repeat !important;}
+    body[data-theme="halloween"]::after{display:none !important;}
+    body[data-theme="halloween"] .board-wrap{background:transparent !important; border:none !important; box-shadow:none !important;}
+    body[data-theme="sponge"]::before{background:url("assets/themes/sponge-exact.png") center/cover no-repeat !important;}
+    body[data-theme="sponge"]::after{display:none !important;}
+    body[data-theme="sponge"] .board-wrap{background:transparent !important; border:none !important; box-shadow:none !important;}
     @media (max-width:1100px){html,body{overflow:auto}.app{height:auto; min-height:100svh; overflow:visible}.main{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;overflow:visible}.board-wrap{min-height:calc(var(--card-h) + var(--fan-y)*12 + 150px)}}
     @media (max-width:700px){:root{--card-w:clamp(42px,12.2vw,55px);--fan-y:20px;--gap:5px}.app{padding:8px}.topbar{border-radius:18px; min-height:auto}.logo{width:50px;height:50px;font-size:30px}.brand p{display:none}.stats{gap:6px}.stat{min-width:64px;padding:8px 9px;border-radius:13px}.stat b{font-size:16px}.stat span{font-size:10px;margin-top:5px}.toolbar{align-items:stretch;flex-direction:column;border-radius:18px}.buttons{display:grid;grid-template-columns:repeat(3,1fr)}button,select{padding:0 9px;font-size:13px}.theme-picker{margin-left:0;justify-content:space-between}.theme-picker select{max-width:none;flex:1}.board{padding:22px 6px 10px; overflow:visible; justify-content:center}.top-row{grid-template-columns:repeat(2,var(--card-w)) 1fr repeat(4,var(--card-w));}.side{grid-template-columns:1fr}.panel{padding:15px;border-radius:18px}.corner.top{top:5%;left:8%}.corner.bottom{right:8%;bottom:5%}.rank{font-size:14px}.suit{font-size:10px}.face-art{inset:25% 13%}.pip-grid{inset:24% 16%}.pip{font-size:15px}.ace-pip{font-size:36px}.modal-card{padding:20px}.warm{grid-column:span 2}}
     @media (max-width:380px){:root{--card-w:39px;--gap:4px;--fan-y:18px}.buttons{grid-template-columns:repeat(2,1fr)}.warm{grid-column:auto}.top-row,.tableau{width:100%; justify-content:center}}
